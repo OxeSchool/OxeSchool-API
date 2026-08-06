@@ -1,4 +1,4 @@
-package com.oxeschool.api;
+package com.oxeschool.api.services;
 
 import com.oxeschool.api.dtos.AlunoResponse;
 import com.oxeschool.api.dtos.RegistrarAlunoRequest;
