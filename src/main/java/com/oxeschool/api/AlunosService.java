@@ -6,17 +6,23 @@ import com.oxeschool.api.entity.AlunoEntity;
 import com.oxeschool.api.exceptions.customs.aluno.AlunoJaExisteException;
 import com.oxeschool.api.mappers.AlunoMapper;
 import com.oxeschool.api.repository.AlunosRepository;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
-@RequiredArgsConstructor
 public class AlunosService {
 
-    private AlunosRepository alunosRepository;
-    private AlunoMapper alunoMapper;
-    private PasswordEncoder passwordEncoder;
+    final private AlunosRepository alunosRepository;
+    final private AlunoMapper alunoMapper;
+    final private PasswordEncoder passwordEncoder;
+
+    public AlunosService(AlunosRepository alunosRepository, AlunoMapper alunoMapper, PasswordEncoder passwordEncoder) {
+        this.alunosRepository = alunosRepository;
+        this.alunoMapper = alunoMapper;
+        this.passwordEncoder = passwordEncoder;
+    }
 
     public AlunoResponse registrar(RegistrarAlunoRequest registrarAlunoRequest){
 
@@ -32,6 +38,7 @@ public class AlunosService {
                 .nome(registrarAlunoRequest.getNome())
                 .email(registrarAlunoRequest.getEmail())
                 .senha(senhaCriptografada)
+                .cursosIds(List.of())
                 .build();
 
         var alunoSalvo = alunosRepository.save(novoAluno);

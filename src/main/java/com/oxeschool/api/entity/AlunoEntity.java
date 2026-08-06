@@ -20,6 +20,7 @@ public class AlunoEntity {
     private String nome;
     private String email;
     private String senha;
+    @Column(name = "cursos_Ids")
     private List<Integer> cursosIds;
 
 }

@@ -3,7 +3,7 @@ package com.oxeschool.api.controllers;
 import com.oxeschool.api.AlunosService;
 import com.oxeschool.api.dtos.AlunoResponse;
 import com.oxeschool.api.dtos.RegistrarAlunoRequest;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/registrar")
-@RequiredArgsConstructor
 public class RegistrosController {
 
-    private AlunosService alunosService;
+    private final AlunosService alunosService;
+
+    public RegistrosController(AlunosService alunosService) {
+        this.alunosService = alunosService;
+    }
 
     @PostMapping("/aluno")
     public ResponseEntity<AlunoResponse> registrarAluno(@RequestBody RegistrarAlunoRequest registrarAlunoRequest){
