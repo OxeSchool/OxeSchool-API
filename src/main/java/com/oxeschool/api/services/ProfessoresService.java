@@ -1,11 +1,12 @@
 package com.oxeschool.api.services;
 
-import com.oxeschool.api.dtos.professor.ProfessorResponse;
-import com.oxeschool.api.dtos.professor.RegistrarProfessorRequest;
+import com.oxeschool.api.dtos.usuario.response.ProfessorResponse;
+import com.oxeschool.api.dtos.usuario.request.RegistrarProfessorRequest;
 import com.oxeschool.api.entity.ProfessorEntity;
 import com.oxeschool.api.exceptions.customs.professor.ProfessorJaExisteException;
 import com.oxeschool.api.mappers.ProfessorMapper;
 import com.oxeschool.api.repository.ProfessoresRepository;
+import com.oxeschool.api.repository.UsuariosRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,18 +16,20 @@ public class ProfessoresService {
     final private ProfessoresRepository professoresRepository;
     final private PasswordEncoder passwordEncoder;
     final private ProfessorMapper professorMapper;
+    final private UsuariosRepository usuariosRepository;
 
     public  ProfessoresService(ProfessoresRepository professoresRepository,
                                PasswordEncoder passwordEncoder,
-                               ProfessorMapper professorMapper) {
+                               ProfessorMapper professorMapper, UsuariosRepository usuariosRepository) {
         this.professoresRepository = professoresRepository;
         this.passwordEncoder = passwordEncoder;
         this.professorMapper = professorMapper;
+        this.usuariosRepository = usuariosRepository;
     }
 
     public ProfessorResponse registrar(RegistrarProfessorRequest registrarProfessorRequest){
 
-        var jaExiste = professoresRepository.existsByEmail(registrarProfessorRequest.getEmail());
+        var jaExiste = usuariosRepository.existsByEmail(registrarProfessorRequest.getEmail());
 
         if (jaExiste){
             throw new ProfessorJaExisteException();
