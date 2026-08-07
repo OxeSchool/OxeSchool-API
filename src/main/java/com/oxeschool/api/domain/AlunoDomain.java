@@ -6,15 +6,8 @@ import lombok.Setter;
 
 import java.util.List;
 
-@AllArgsConstructor
 @Getter
 @Setter
-public class AlunoDomain {
-
-    private Long id;
-    private String nome;
-    private String email;
-    private String senha;
-    private List<Integer> cursosMatriculados;
-
+public class AlunoDomain extends UsuarioDomain {
+    // campos futuros de matrícula entram aqui
 }
