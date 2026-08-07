@@ -1,19 +1,16 @@
-package com.oxeschool.api.dtos.aluno;
+package com.oxeschool.api.dtos.usuario.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
-@AllArgsConstructor
 @Getter
 @Setter
-public class AlunoResponse {
-
+@NoArgsConstructor
+@AllArgsConstructor
+public class UsuarioResponse {
     private Long id;
     private String nome;
     private String email;
-    private List<Integer> cursosMatriculados;
-
 }
