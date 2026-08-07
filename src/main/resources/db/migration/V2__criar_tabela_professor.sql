@@ -3,6 +3,6 @@ CREATE TABLE professores(
     id BIGSERIAL PRIMARY KEY,
     nome VARCHAR(50) NOT NULL,
     email VARCHAR(50) NOT NULL,
-    senha VARCHAR(50) NOT NULL,
+    senha VARCHAR(255) NOT NULL
 
 );
