@@ -14,6 +14,6 @@ public class AlunoResponse {
     private Long id;
     private String nome;
     private String email;
-    private List<Integer> cursosIds;
+    private List<Integer> cursosMatriculados;
 
 }
