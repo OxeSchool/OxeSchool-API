@@ -2,19 +2,15 @@ package com.oxeschool.api.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.List;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Table(name = "alunos")
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@EqualsAndHashCode(callSuper = true)
+@SuperBuilder
 public class AlunoEntity extends UsuarioEntity {
-
-    @Column(name = "cursos_matriculados")
-    private List<Integer> cursosMatriculados;
-
+    // Alterações futuras -> campos relacionados aos epics de matricula e cursos
 }

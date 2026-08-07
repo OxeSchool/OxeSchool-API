@@ -2,13 +2,16 @@ package com.oxeschool.api.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)   // 1 tabela usuarios + 1 por tipo
+@Table(name = "usuarios")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 public class UsuarioEntity {
 
     @Id
@@ -16,7 +19,10 @@ public class UsuarioEntity {
     private Long id;
 
     private String nome;
+
+    @Column(nullable = false, unique = true)
     private String email;
+
     private String senha;
 
 }
