@@ -1,12 +1,13 @@
 package com.oxeschool.api.controllers;
 
-import com.oxeschool.api.dtos.professor.ProfessorResponse;
-import com.oxeschool.api.dtos.professor.RegistrarProfessorRequest;
+import com.oxeschool.api.dtos.usuario.response.ProfessorResponse;
+import com.oxeschool.api.dtos.usuario.request.RegistrarProfessorRequest;
 import com.oxeschool.api.services.AlunosService;
-import com.oxeschool.api.dtos.aluno.AlunoResponse;
-import com.oxeschool.api.dtos.aluno.RegistrarAlunoRequest;
+import com.oxeschool.api.dtos.usuario.response.AlunoResponse;
+import com.oxeschool.api.dtos.usuario.request.RegistrarAlunoRequest;
 
 import com.oxeschool.api.services.ProfessoresService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,13 +29,13 @@ public class RegistrosController {
     }
 
     @PostMapping("/aluno")
-    public ResponseEntity<AlunoResponse> registrarAluno(@RequestBody RegistrarAlunoRequest registrarAlunoRequest){
+    public ResponseEntity<AlunoResponse> registrarAluno(@Valid @RequestBody RegistrarAlunoRequest registrarAlunoRequest){
 
         return ResponseEntity.status(HttpStatus.CREATED).body(alunosService.registrar(registrarAlunoRequest));
     }
 
     @PostMapping("/professor")
-    public ResponseEntity<ProfessorResponse> registrarProfessor(@RequestBody RegistrarProfessorRequest registrarProfessorRequest){
+    public ResponseEntity<ProfessorResponse> registrarProfessor(@Valid @RequestBody RegistrarProfessorRequest registrarProfessorRequest){
 
         return ResponseEntity.status(HttpStatus.CREATED).body(professoresService.registrar(registrarProfessorRequest));
     }
