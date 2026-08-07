@@ -1,8 +1,8 @@
 package com.oxeschool.api.controllers;
 
-import com.oxeschool.api.AlunosService;
-import com.oxeschool.api.dtos.AlunoResponse;
-import com.oxeschool.api.dtos.RegistrarAlunoRequest;
+import com.oxeschool.api.services.AlunosService;
+import com.oxeschool.api.dtos.aluno.AlunoResponse;
+import com.oxeschool.api.dtos.aluno.RegistrarAlunoRequest;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

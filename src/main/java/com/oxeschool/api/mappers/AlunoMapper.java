@@ -1,7 +1,7 @@
 package com.oxeschool.api.mappers;
 
 import com.oxeschool.api.domain.AlunoDomain;
-import com.oxeschool.api.dtos.AlunoResponse;
+import com.oxeschool.api.dtos.aluno.AlunoResponse;
 import com.oxeschool.api.entity.AlunoEntity;
 import org.mapstruct.Mapper;
 

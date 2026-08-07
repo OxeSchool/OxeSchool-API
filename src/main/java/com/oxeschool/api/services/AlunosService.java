@@ -1,7 +1,7 @@
 package com.oxeschool.api.services;
 
-import com.oxeschool.api.dtos.AlunoResponse;
-import com.oxeschool.api.dtos.RegistrarAlunoRequest;
+import com.oxeschool.api.dtos.aluno.AlunoResponse;
+import com.oxeschool.api.dtos.aluno.RegistrarAlunoRequest;
 import com.oxeschool.api.entity.AlunoEntity;
 import com.oxeschool.api.exceptions.customs.aluno.AlunoJaExisteException;
 import com.oxeschool.api.mappers.AlunoMapper;
