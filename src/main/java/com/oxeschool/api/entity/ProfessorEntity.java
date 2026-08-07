@@ -3,20 +3,18 @@ package com.oxeschool.api.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "professores")
-@AllArgsConstructor
-@NoArgsConstructor
-@Builder
 @Getter
 @Setter
-public class ProfessorEntity {
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class ProfessorEntity extends UsuarioEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String nome;
-    private String email;
-    private String senha;
+    @Column(name = "cursos_lecionados")
+    private List<Integer> cursosMinistrados;
 
 }

@@ -7,20 +7,14 @@ import java.util.List;
 
 @Entity
 @Table(name = "alunos")
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class AlunoEntity {
+public class AlunoEntity extends UsuarioEntity {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private String nome;
-    private String email;
-    private String senha;
-    @Column(name = "cursos_Ids")
-    private List<Integer> cursosIds;
+    @Column(name = "cursos_matriculados")
+    private List<Integer> cursosMatriculados;
 
 }
