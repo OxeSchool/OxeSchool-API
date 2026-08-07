@@ -42,8 +42,7 @@ public class ProfessoresService {
 
         var professorSalvo = professoresRepository.save(novoProfessor);
 
-        return professorMapper.toProfessorResponse(professorMapper.toProfessorDomain(novoProfessor));
+        return professorMapper.toProfessorResponse(professorMapper.toProfessorDomain(professorSalvo));
     }
-
 
 }
