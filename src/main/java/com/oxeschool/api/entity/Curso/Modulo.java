@@ -13,14 +13,8 @@ import java.util.UUID;
 @Builder
 public class Modulo{
 
-    public Modulo(UUID id, String nome){
-        this.id = id;
-        this.nome = nome;
-        this.aulas = new ArrayList<>();
-    }
-
     private UUID id;
     private String nome;
-    private List<Aulas> aulas;
+    private List<Aula> aulas;
 
 }

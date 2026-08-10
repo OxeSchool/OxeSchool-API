@@ -9,7 +9,7 @@ import java.util.UUID;
 @Getter
 @Setter
 @Builder
-public class Aulas{
+public class Aula {
 
     private UUID id;
     private String titulo;

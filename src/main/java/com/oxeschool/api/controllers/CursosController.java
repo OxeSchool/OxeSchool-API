@@ -1,5 +1,6 @@
 package com.oxeschool.api.controllers;
 
+import com.oxeschool.api.dtos.curso.CriarAulaRequest;
 import com.oxeschool.api.dtos.curso.CriarCursoRequest;
 import com.oxeschool.api.dtos.curso.CriarModuloRequest;
 import com.oxeschool.api.dtos.curso.CursoResponse;
@@ -36,6 +37,13 @@ public class CursosController {
     public ResponseEntity<CursoResponse> criarModulo(@PathVariable UUID cursoId, @RequestBody CriarModuloRequest criarModuloRequest){
 
         return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.adicionarModulo(cursoId, criarModuloRequest));
+    }
+
+
+    @PostMapping("/{cursoId}/modulo/{moduloId}/aula")
+    public ResponseEntity<CursoResponse> criarAula(@PathVariable UUID cursoId, @PathVariable UUID moduloId, @RequestBody CriarAulaRequest criarAulaRequest){
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.adicionarAula(cursoId, moduloId, criarAulaRequest));
     }
 
 }
