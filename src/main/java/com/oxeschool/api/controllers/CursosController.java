@@ -5,10 +5,9 @@ import com.oxeschool.api.dtos.curso.CursoResponse;
 import com.oxeschool.api.services.CursosService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/curso")
@@ -18,6 +17,12 @@ public class CursosController {
 
     public CursosController(CursosService cursosService) {
         this.cursosService = cursosService;
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<CursoResponse> pegarCursoPorId(@PathVariable UUID id){
+
+        return  ResponseEntity.ok(cursosService.pegarCursoPorId(id));
     }
 
     @PostMapping
