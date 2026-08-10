@@ -19,7 +19,7 @@ public class MatriculaEntity {
 
     @Id
     private UUID id;
-    private UUID idAluno;
+    private Long idAluno;
     private UUID idCurso;
     private List<UUID> aulasConcluidas;
     private StatusCurso status;
