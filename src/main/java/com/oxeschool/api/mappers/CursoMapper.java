@@ -2,7 +2,7 @@ package com.oxeschool.api.mappers;
 
 import com.oxeschool.api.domain.CursoDomain;
 import com.oxeschool.api.dtos.curso.CursoResponse;
-import com.oxeschool.api.entity.CursoEntity;
+import com.oxeschool.api.entity.Curso.CursoEntity;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

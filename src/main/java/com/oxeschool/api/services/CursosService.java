@@ -2,12 +2,14 @@ package com.oxeschool.api.services;
 
 import com.oxeschool.api.dtos.curso.CriarCursoRequest;
 import com.oxeschool.api.dtos.curso.CursoResponse;
-import com.oxeschool.api.entity.CursoEntity;
+import com.oxeschool.api.entity.Curso.CursoEntity;
 import com.oxeschool.api.entity.StatusCurso;
 import com.oxeschool.api.exceptions.customs.curso.CursoJaExisteException;
 import com.oxeschool.api.mappers.CursoMapper;
 import com.oxeschool.api.repository.CursosRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class CursosService {
@@ -22,9 +24,9 @@ public class CursosService {
 
     public CursoResponse criar(CriarCursoRequest criarCursoRequest) {
 
-        var jaExiste = cursosRepository.existsByNomeAndProfessorId(
+        var jaExiste = cursosRepository.existsByNomeAndIdProfessor(
                 criarCursoRequest.getNome(),
-                criarCursoRequest.getProfessorId()
+                criarCursoRequest.getIdProfessor()
         );
 
         if (jaExiste) {
@@ -32,12 +34,9 @@ public class CursosService {
         }
 
         var novoCurso = CursoEntity.builder()
+                .id(UUID.randomUUID())
                 .nome(criarCursoRequest.getNome())
-                .descricao(criarCursoRequest.getDescricao())
-                .professorId(criarCursoRequest.getProfessorId())
-                .categoria(criarCursoRequest.getCategoria())
-                .cargaHoraria(criarCursoRequest.getCargaHoraria())
-                .status(StatusCurso.ATIVO)
+                .idProfessor(criarCursoRequest.getIdProfessor())
                 .build();
 
         var cursoSalvo = cursosRepository.save(novoCurso);

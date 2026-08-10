@@ -1,21 +1,22 @@
 package com.oxeschool.api.dtos.curso;
 
+import com.oxeschool.api.entity.Curso.Modulos;
 import com.oxeschool.api.entity.StatusCurso;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Getter
 @Setter
 public class CursoResponse {
 
-    private Long id;
+    private UUID id;
     private String nome;
-    private String descricao;
-    private Long professorId;
-    private String categoria;
-    private Integer cargaHoraria;
-    private StatusCurso status;
+    private Long idProfessor;
+    private List<Modulos> modulos;
 
 }
