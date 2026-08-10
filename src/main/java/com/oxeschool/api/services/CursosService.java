@@ -3,7 +3,6 @@ package com.oxeschool.api.services;
 import com.oxeschool.api.dtos.curso.CriarCursoRequest;
 import com.oxeschool.api.dtos.curso.CursoResponse;
 import com.oxeschool.api.entity.Curso.CursoEntity;
-import com.oxeschool.api.entity.StatusCurso;
 import com.oxeschool.api.exceptions.customs.curso.CursoJaExisteException;
 import com.oxeschool.api.exceptions.customs.curso.CursoNaoEncontradoException;
 import com.oxeschool.api.mappers.CursoMapper;

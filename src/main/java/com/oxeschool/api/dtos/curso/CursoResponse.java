@@ -1,7 +1,6 @@
 package com.oxeschool.api.dtos.curso;
 
 import com.oxeschool.api.entity.Curso.Modulos;
-import com.oxeschool.api.entity.StatusCurso;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
