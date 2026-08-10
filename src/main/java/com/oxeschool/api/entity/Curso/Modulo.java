@@ -2,7 +2,6 @@ package com.oxeschool.api.entity.Curso;
 
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
