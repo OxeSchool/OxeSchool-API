@@ -6,6 +6,8 @@ import com.oxeschool.api.entity.MatriculaEntity;
 import com.oxeschool.api.enums.StatusCurso;
 import com.oxeschool.api.exceptions.customs.aluno.AlunoNaoEncontradoException;
 import com.oxeschool.api.exceptions.customs.curso.CursoNaoEncontradoException;
+import com.oxeschool.api.exceptions.customs.matricula.MatriculaJaExisteException;
+import com.oxeschool.api.exceptions.customs.matricula.MatriculaNaoEncontradaException;
 import com.oxeschool.api.mappers.MatriculaMapper;
 import com.oxeschool.api.repository.AlunosRepository;
 import com.oxeschool.api.repository.CursosRepository;
@@ -49,6 +51,12 @@ public class MatriculaService {
             throw new CursoNaoEncontradoException();
         }
 
+        var matriculaJaExiste = matriculasRepository.existsByIdAlunoAndIdCurso(criarMatriculaRequest.getIdAluno(), criarMatriculaRequest.getIdCurso());
+
+        if (matriculaJaExiste){
+            throw new MatriculaJaExisteException();
+        }
+
         var novaMatricula = MatriculaEntity.builder()
                 .id(UUID.randomUUID())
                 .idAluno(criarMatriculaRequest.getIdAluno())
@@ -61,6 +69,17 @@ public class MatriculaService {
         var matriculaSalva = matriculasRepository.save(novaMatricula);
 
         return matriculaMapper.toMatriculaResponse(matriculaMapper.toMatriculaDomain(matriculaSalva));
+
+    }
+
+    public void cancelarMatricula(UUID id){
+
+        var matricula = matriculasRepository.findById(id)
+                .orElseThrow(MatriculaNaoEncontradaException::new);
+
+        matricula.setStatus(StatusCurso.INATIVO);
+
+        matriculasRepository.save(matricula);
 
     }
 

@@ -6,4 +6,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.UUID;
 
 public interface MatriculasRepository extends MongoRepository<MatriculaEntity, UUID> {
+
+    Boolean existsByIdAlunoAndIdCurso(Long idAluno, UUID idCurso);
 }
