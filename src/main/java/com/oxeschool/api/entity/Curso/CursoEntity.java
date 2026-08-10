@@ -19,7 +19,7 @@ public class CursoEntity {
     private UUID id;
     private String nome;
     private Long idProfessor;
-    private List<Modulos> modulos;
+    private List<Modulo> modulos;
 
 }
 
