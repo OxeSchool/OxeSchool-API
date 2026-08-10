@@ -7,9 +7,8 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CriarCursoRequest {
+public class CriarModuloRequest {
 
     private String nome;
-    private Long idProfessor;
 
 }

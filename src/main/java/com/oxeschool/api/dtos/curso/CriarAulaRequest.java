@@ -7,9 +7,11 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CriarCursoRequest {
+public class CriarAulaRequest {
 
-    private String nome;
-    private Long idProfessor;
+    private String titulo;
+    private String texto;
+    private String videoUrl;
+
 
 }

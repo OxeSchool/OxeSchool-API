@@ -1,21 +1,21 @@
 package com.oxeschool.api.domain;
 
-import com.oxeschool.api.entity.StatusCurso;
+import com.oxeschool.api.entity.Curso.Modulo;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Getter
 @Setter
 public class CursoDomain {
 
-    private Long id;
+    private UUID id;
     private String nome;
-    private String descricao;
-    private Long professorId;
-    private String categoria;
-    private Integer cargaHoraria;
-    private StatusCurso status;
+    private Long idProfessor;
+    private List<Modulo> modulos;
 
 }

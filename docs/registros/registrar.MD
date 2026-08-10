@@ -23,17 +23,15 @@ Response body expected:
     "id": Long
     "nome": String
     "email": String
-    "cursosIds": List<Long>
+    "cursosMatriculados": List<Long>
     }
    ```
 
 #### Returns
 
 * `201 - CREATED` - Sucess.
-* `400 - BAD REQUEST` - Invalid parameters(null parameters, size invalid).
+* `400 - BAD REQUEST` - Invalid parameters(nome/email/senha null or blank, email invalid, senha with less than 8 characters).
 * `409 - CONFLICT` - Aluno already exists (email already registered).
-
---- 
 
 --- 
 
@@ -56,13 +54,14 @@ Response body expected:
     "id": Long
     "nome": String
     "email": String
+    "cursosMinistrados": List<Long>
     }
    ```
 
 #### Returns
 
 * `201 - CREATED` - Sucess.
-* `400 - BAD REQUEST` - Invalid parameters(null parameters, size invalid).
+* `400 - BAD REQUEST` - Invalid parameters(nome/email/senha null or blank, email invalid, senha with less than 8 characters).
 * `409 - CONFLICT` - Professor already exists (email already registered).
 
-
+--- 

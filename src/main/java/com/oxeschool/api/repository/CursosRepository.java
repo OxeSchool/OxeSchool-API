@@ -1,10 +1,12 @@
 package com.oxeschool.api.repository;
 
-import com.oxeschool.api.entity.CursoEntity;
-import org.springframework.data.jpa.repository.JpaRepository;
+import com.oxeschool.api.entity.Curso.CursoEntity;
+import org.springframework.data.mongodb.repository.MongoRepository;
 
-public interface CursosRepository extends JpaRepository<CursoEntity, Long> {
+import java.util.UUID;
 
-    Boolean existsByNomeAndProfessorId(String nome, Long professorId);
+public interface CursosRepository extends MongoRepository<CursoEntity, UUID> {
+
+    Boolean existsByNomeAndIdProfessor(String nome, Long idProfessor);
 
 }

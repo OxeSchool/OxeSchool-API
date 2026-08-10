@@ -1,20 +1,51 @@
 # Curso Routes
 
-## All routes start with `/curso`
+## All routes starts with `/curso`
 
----
+--- 
 
-### POST `/curso`
+### GET `/{id}`
+
+Response body expected:
+
+   ```
+   {
+    "id": UUID
+    "nome": String
+    "idProfessor": Long
+    "modulos": [
+        {
+            "id": UUID
+            "nome": String
+            "aulas": [
+                {
+                    "id": UUID
+                    "titulo": String
+                    "texto": String
+                    "videoUrl": String
+                }
+            ]
+        }
+    ]
+    }
+   ```
+
+#### Returns
+
+* `200 - OK` - Sucess.
+* `400 - BAD REQUEST` - Invalid parameters(null parameters, size invalid).
+* `404 - NOT FOUND` - Curso not found.
+
+--- 
+
+### POST `/`
 
 Request body expected:
 
    ```
    {
     "nome": String
-    "descricao": String
-    "professorId": Long
-    "categoria": String
-    "cargaHoraria": Integer
+    "idProfessor": Long
     }
    ```
 
@@ -22,18 +53,98 @@ Response body expected:
 
    ```
    {
-    "id": Long
+    "id": UUID
     "nome": String
-    "descricao": String
-    "professorId": Long
-    "categoria": String
-    "cargaHoraria": Integer
-    "status": String ("ATIVO", "INATIVO", "EM_ANDAMENTO", "CONCLUIDO")
+    "idProfessor": Long
+    "modulos": []
     }
    ```
 
 #### Returns
 
 * `201 - CREATED` - Sucess.
-* `400 - BAD REQUEST` - Invalid parameters (null parameters, size invalid).
-* `409 - CONFLICT` - Curso already exists (same nome + professorId already registered).
+* `400 - BAD REQUEST` - Invalid parameters(null parameters, size invalid).
+* `409 - CONFLICT` - This professor already has a curso with this nome.
+
+--- 
+
+### POST `/{cursoId}/modulo`
+
+Request body expected:
+
+   ```
+   {
+    "nome": String
+    }
+   ```
+
+Response body expected:
+
+   ```
+   {
+    "id": UUID
+    "nome": String
+    "idProfessor": Long
+    "modulos": [
+        {
+            "id": UUID
+            "nome": String
+            "aulas": []
+        }
+    ]
+    }
+   ```
+
+#### Returns
+
+* `201 - CREATED` - Sucess.
+* `400 - BAD REQUEST` - Invalid parameters(null parameters, size invalid).
+* `404 - NOT FOUND` - Curso not found.
+* `409 - CONFLICT` - This curso already has a modulo with this nome.
+
+--- 
+
+### POST `/{cursoId}/modulo/{moduloId}/aula`
+
+Request body expected:
+
+   ```
+   {
+    "titulo": String
+    "texto": String
+    "videoUrl": String
+    }
+   ```
+
+Response body expected:
+
+   ```
+   {
+    "id": UUID
+    "nome": String
+    "idProfessor": Long
+    "modulos": [
+        {
+            "id": UUID
+            "nome": String
+            "aulas": [
+                {
+                    "id": UUID
+                    "titulo": String
+                    "texto": String
+                    "videoUrl": String
+                }
+            ]
+        }
+    ]
+    }
+   ```
+
+#### Returns
+
+* `201 - CREATED` - Sucess.
+* `400 - BAD REQUEST` - Invalid parameters(null parameters, size invalid).
+* `404 - NOT FOUND` - Curso not found | Modulo not found.
+* `409 - CONFLICT` - This modulo already has an aula with the same titulo, texto and videoUrl.
+
+--- 
