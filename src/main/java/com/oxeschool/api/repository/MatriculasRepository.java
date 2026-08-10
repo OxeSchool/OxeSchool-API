@@ -5,5 +5,5 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.UUID;
 
-public interface MatriculaRepository extends MongoRepository<MatriculaEntity, UUID> {
+public interface MatriculasRepository extends MongoRepository<MatriculaEntity, UUID> {
 }
