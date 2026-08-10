@@ -1,14 +1,17 @@
 package com.oxeschool.api.services;
 
 import com.oxeschool.api.dtos.curso.CriarCursoRequest;
+import com.oxeschool.api.dtos.curso.CriarModuloRequest;
 import com.oxeschool.api.dtos.curso.CursoResponse;
 import com.oxeschool.api.entity.Curso.CursoEntity;
+import com.oxeschool.api.entity.Curso.Modulo;
 import com.oxeschool.api.exceptions.customs.curso.CursoJaExisteException;
 import com.oxeschool.api.exceptions.customs.curso.CursoNaoEncontradoException;
 import com.oxeschool.api.mappers.CursoMapper;
 import com.oxeschool.api.repository.CursosRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 @Service
@@ -37,6 +40,7 @@ public class CursosService {
                 .id(UUID.randomUUID())
                 .nome(criarCursoRequest.getNome())
                 .idProfessor(criarCursoRequest.getIdProfessor())
+                .modulos(new ArrayList<>())
                 .build();
 
         var cursoSalvo = cursosRepository.save(novoCurso);
@@ -51,6 +55,28 @@ public class CursosService {
 
         return cursoMapper.toCursoResponse(cursoMapper.toCursoDomain(curso));
 
+    }
+
+    public CursoResponse adicionarModulo(UUID cursoId, CriarModuloRequest criarModuloRequest){
+
+        var curso = cursosRepository.findById(cursoId)
+                .orElseThrow(CursoNaoEncontradoException::new);
+
+        var modulos = curso.getModulos();
+
+        var novoModulo = Modulo.builder()
+                .id(UUID.randomUUID())
+                .nome(criarModuloRequest.getNome())
+                .aulas(new ArrayList<>())
+                .build();
+
+        modulos.add(novoModulo);
+
+        curso.setModulos(modulos);
+
+        var cursoSalvo = cursosRepository.save(curso);
+
+        return cursoMapper.toCursoResponse(cursoMapper.toCursoDomain(cursoSalvo));
     }
 
 }

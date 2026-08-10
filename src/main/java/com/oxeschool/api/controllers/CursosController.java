@@ -1,6 +1,7 @@
 package com.oxeschool.api.controllers;
 
 import com.oxeschool.api.dtos.curso.CriarCursoRequest;
+import com.oxeschool.api.dtos.curso.CriarModuloRequest;
 import com.oxeschool.api.dtos.curso.CursoResponse;
 import com.oxeschool.api.services.CursosService;
 import org.springframework.http.HttpStatus;
@@ -29,6 +30,12 @@ public class CursosController {
     public ResponseEntity<CursoResponse> criarCurso(@RequestBody CriarCursoRequest criarCursoRequest) {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.criar(criarCursoRequest));
+    }
+
+    @PatchMapping("/{cursoId}/modulo")
+    public ResponseEntity<CursoResponse> criarModulo(@PathVariable UUID cursoId, @RequestBody CriarModuloRequest criarModuloRequest){
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.adicionarModulo(cursoId, criarModuloRequest));
     }
 
 }
