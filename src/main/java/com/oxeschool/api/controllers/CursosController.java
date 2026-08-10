@@ -32,7 +32,7 @@ public class CursosController {
         return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.criar(criarCursoRequest));
     }
 
-    @PatchMapping("/{cursoId}/modulo")
+    @PostMapping("/{cursoId}/modulo")
     public ResponseEntity<CursoResponse> criarModulo(@PathVariable UUID cursoId, @RequestBody CriarModuloRequest criarModuloRequest){
 
         return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.adicionarModulo(cursoId, criarModuloRequest));
