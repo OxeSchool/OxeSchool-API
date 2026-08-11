@@ -158,8 +158,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         String path = request.getServletPath();
 
-        return path.startsWith("/auth/")
-                && !path.equals("/auth/logout");
+        return path.equals("/refresh");
     }
 
 }
