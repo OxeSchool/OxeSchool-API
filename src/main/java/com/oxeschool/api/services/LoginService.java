@@ -67,7 +67,7 @@ public class LoginService {
         var senhaCorreta = passwordEncoder.matches(loginRequest.getSenha(), usuario.getSenha());
 
         if (!senhaCorreta){
-            throw new AlunoNaoEncontradoException();
+            throw new ProfessorNaoEncontradoException();
         }
 
         var ehProfessor = professorRepository.existsById(usuario.getId());
