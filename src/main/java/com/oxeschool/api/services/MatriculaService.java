@@ -1,11 +1,13 @@
 package com.oxeschool.api.services;
 
+import com.oxeschool.api.dtos.matricula.AlunoMatriculadoResponse;
 import com.oxeschool.api.dtos.matricula.MatriculaResponse;
 import com.oxeschool.api.dtos.matricula.CriarMatriculaRequest;
 import com.oxeschool.api.entity.MatriculaEntity;
 import com.oxeschool.api.enums.StatusCurso;
 import com.oxeschool.api.exceptions.customs.aluno.AlunoNaoEncontradoException;
 import com.oxeschool.api.exceptions.customs.curso.CursoNaoEncontradoException;
+import com.oxeschool.api.exceptions.customs.curso.CursoNaoPertenceAoProfessorException;
 import com.oxeschool.api.exceptions.customs.matricula.MatriculaJaExisteException;
 import com.oxeschool.api.exceptions.customs.matricula.MatriculaNaoEncontradaException;
 import com.oxeschool.api.mappers.MatriculaMapper;
@@ -16,7 +18,9 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class MatriculaService {
@@ -81,6 +85,42 @@ public class MatriculaService {
 
         matriculasRepository.save(matricula);
 
+    }
+
+    public List<AlunoMatriculadoResponse> listarAlunosMatriculados(UUID idCurso, Long idProfessorSolicitante) {
+
+        var curso = cursosRepository.findById(idCurso)
+                .orElseThrow(CursoNaoEncontradoException::new);
+
+        if (!curso.getIdProfessor().equals(idProfessorSolicitante)) {
+            throw new CursoNaoPertenceAoProfessorException();
+        }
+
+        var matriculasAtivas = matriculasRepository.findByIdCursoAndStatus(idCurso, StatusCurso.ATIVO);
+
+        var totalAulas = curso.getModulos().stream()
+                .mapToLong(modulo -> modulo.getAulas().size())
+                .sum();
+
+        return matriculasAtivas.stream()
+                .map(matricula -> {
+
+                    var aluno = alunosRepository.findById(matricula.getIdAluno())
+                            .orElseThrow(AlunoNaoEncontradoException::new);
+
+                    var progresso = totalAulas == 0
+                            ? 0.0
+                            : (matricula.getAulasConcluidas().size() * 100.0) / totalAulas;
+
+                    return new AlunoMatriculadoResponse(
+                            aluno.getId(),
+                            aluno.getNome(),
+                            aluno.getEmail(),
+                            matricula.getStatus(),
+                            progresso
+                    );
+                })
+                .collect(Collectors.toList());
     }
 
 }

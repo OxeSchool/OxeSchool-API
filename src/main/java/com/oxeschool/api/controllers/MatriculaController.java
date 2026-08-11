@@ -1,5 +1,6 @@
 package com.oxeschool.api.controllers;
 
+import com.oxeschool.api.dtos.matricula.AlunoMatriculadoResponse;
 import com.oxeschool.api.dtos.matricula.MatriculaResponse;
 import com.oxeschool.api.dtos.matricula.CriarMatriculaRequest;
 import com.oxeschool.api.services.MatriculaService;
@@ -7,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -31,6 +33,14 @@ public class MatriculaController {
         matriculaService.cancelarMatricula(id);
 
         return  ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    @GetMapping("/curso/{idCurso}")
+    public ResponseEntity<List<AlunoMatriculadoResponse>> listarAlunosMatriculados(
+            @PathVariable UUID idCurso,
+            @RequestParam Long idProfessor){
+
+        return ResponseEntity.ok(matriculaService.listarAlunosMatriculados(idCurso, idProfessor));
     }
 
 }
