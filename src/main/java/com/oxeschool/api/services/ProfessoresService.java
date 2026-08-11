@@ -5,7 +5,6 @@ import com.oxeschool.api.dtos.usuario.request.RegistrarProfessorRequest;
 import com.oxeschool.api.entity.ProfessorEntity;
 import com.oxeschool.api.exceptions.customs.professor.ProfessorJaExisteException;
 import com.oxeschool.api.mappers.ProfessorMapper;
-import com.oxeschool.api.repository.ProfessoresRepository;
 import com.oxeschool.api.repository.UsuariosRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

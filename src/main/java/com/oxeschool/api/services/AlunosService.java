@@ -5,7 +5,6 @@ import com.oxeschool.api.dtos.usuario.request.RegistrarAlunoRequest;
 import com.oxeschool.api.entity.AlunoEntity;
 import com.oxeschool.api.exceptions.customs.aluno.AlunoJaExisteException;
 import com.oxeschool.api.mappers.AlunoMapper;
-import com.oxeschool.api.repository.AlunosRepository;
 import com.oxeschool.api.repository.UsuariosRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
