@@ -59,8 +59,8 @@ class AlunosServiceTest {
 
         var resultado = alunosService.registrar(request);
 
-        assertEquals(1L, resultado.getId());
-        assertEquals("ana@email.com", resultado.getEmail());
+        assertEquals(1L, resultado.getUsuario().getId());
+        assertEquals("ana@email.com", resultado.getUsuario().getEmail());
         verify(passwordEncoder).encode("senha123");
         verify(alunosRepository).save(any(AlunoEntity.class));
     }
