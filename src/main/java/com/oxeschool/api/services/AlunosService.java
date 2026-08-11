@@ -10,18 +10,14 @@ import com.oxeschool.api.repository.UsuariosRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-
 @Service
 public class AlunosService {
 
-    final private AlunosRepository alunosRepository;
     final private AlunoMapper alunoMapper;
     final private PasswordEncoder passwordEncoder;
     final private UsuariosRepository usuariosRepository;
 
-    public AlunosService(AlunosRepository alunosRepository, AlunoMapper alunoMapper, PasswordEncoder passwordEncoder, UsuariosRepository usuariosRepository) {
-        this.alunosRepository = alunosRepository;
+    public AlunosService(AlunoMapper alunoMapper, PasswordEncoder passwordEncoder, UsuariosRepository usuariosRepository) {
         this.alunoMapper = alunoMapper;
         this.passwordEncoder = passwordEncoder;
         this.usuariosRepository = usuariosRepository;
@@ -43,7 +39,7 @@ public class AlunosService {
                 .senha(senhaCriptografada)
                 .build();
 
-        var alunoSalvo = alunosRepository.save(novoAluno);
+        var alunoSalvo = usuariosRepository.save(novoAluno);
 
         return alunoMapper.toAlunoResponse(alunoMapper.toAlunoDomain(alunoSalvo));
     }

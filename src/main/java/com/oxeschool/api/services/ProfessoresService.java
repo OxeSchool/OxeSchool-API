@@ -13,15 +13,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class ProfessoresService {
 
-    final private ProfessoresRepository professoresRepository;
     final private PasswordEncoder passwordEncoder;
     final private ProfessorMapper professorMapper;
     final private UsuariosRepository usuariosRepository;
 
-    public  ProfessoresService(ProfessoresRepository professoresRepository,
-                               PasswordEncoder passwordEncoder,
+    public  ProfessoresService(PasswordEncoder passwordEncoder,
                                ProfessorMapper professorMapper, UsuariosRepository usuariosRepository) {
-        this.professoresRepository = professoresRepository;
         this.passwordEncoder = passwordEncoder;
         this.professorMapper = professorMapper;
         this.usuariosRepository = usuariosRepository;
@@ -43,7 +40,7 @@ public class ProfessoresService {
                 .senha(senhaCriptografada)
                 .build();
 
-        var professorSalvo = professoresRepository.save(novoProfessor);
+        var professorSalvo = usuariosRepository.save(novoProfessor);
 
         return professorMapper.toProfessorResponse(professorMapper.toProfessorDomain(professorSalvo));
     }
