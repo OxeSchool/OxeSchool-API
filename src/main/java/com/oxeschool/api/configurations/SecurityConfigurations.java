@@ -3,6 +3,7 @@ package com.oxeschool.api.configurations;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -13,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
 public class SecurityConfigurations {
 
 
@@ -32,10 +34,13 @@ public class SecurityConfigurations {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sessionManagement -> sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorizeRequests -> authorizeRequests
-                        .requestMatchers(HttpMethod.POST,"/registrar/**").permitAll()
-                        .requestMatchers(HttpMethod.POST,"/login/**").permitAll()
-                        .requestMatchers("/auth/refresh").permitAll()
-                        .anyRequest().authenticated()
+//                        .requestMatchers(HttpMethod.POST,"/registrar/**").permitAll()
+//                        .requestMatchers(HttpMethod.POST,"/login/**").permitAll()
+//                        .requestMatchers("/auth/refresh").permitAll()
+//                        .anyRequest().authenticated()
+
+                        //TODO retirar isso
+                                .anyRequest().permitAll()
                 )
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
