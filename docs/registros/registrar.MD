@@ -20,10 +20,15 @@ Response body expected:
 
    ```
    {
-    "id": Long
-    "nome": String
-    "email": String
-    "cursosMatriculados": List<Long>
+    "tokens": {
+        "accessToken": String
+        "refreshToken": String
+    },
+    "usuario": {
+        "id": Long
+        "nome": String
+        "email": String
+    }
     }
    ```
 
@@ -51,10 +56,15 @@ Response body expected:
 
    ```
    {
-    "id": Long
-    "nome": String
-    "email": String
-    "cursosMinistrados": List<Long>
+    "tokens": {
+        "accessToken": String
+        "refreshToken": String
+    },
+    "usuario": {
+        "id": Long
+        "nome": String
+        "email": String
+    }
     }
    ```
 
