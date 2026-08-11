@@ -1,5 +1,6 @@
 package com.oxeschool.api.services;
 
+import com.oxeschool.api.dtos.matricula.CursoMatriculadoResponse;
 import com.oxeschool.api.dtos.matricula.MatriculaResponse;
 import com.oxeschool.api.dtos.matricula.CriarMatriculaRequest;
 import com.oxeschool.api.entity.MatriculaEntity;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -81,6 +83,26 @@ public class MatriculaService {
 
         matriculasRepository.save(matricula);
 
+    }
+
+    // Issue #3 - lista os cursos em que o aluno está/esteve matriculado
+    public List<CursoMatriculadoResponse> listarCursosMatriculados(Long idAluno) {
+
+        var matriculas = matriculasRepository.findByIdAluno(idAluno);
+
+        return matriculas.stream()
+                .map(matricula -> {
+                    var curso = cursosRepository.findById(matricula.getIdCurso())
+                            .orElseThrow(CursoNaoEncontradoException::new);
+
+                    return new CursoMatriculadoResponse(
+                            curso.getId(),
+                            curso.getNome(),
+                            matricula.getStatus(),
+                            matricula.getDataMatricula()
+                    );
+                })
+                .toList();
     }
 
 }
