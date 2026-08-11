@@ -6,6 +6,7 @@ import com.oxeschool.api.dtos.matricula.CriarMatriculaRequest;
 import com.oxeschool.api.services.MatriculaService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,12 +23,14 @@ public class MatriculaController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('Aluno')")
     public ResponseEntity<MatriculaResponse> criarMatricula(@RequestBody CriarMatriculaRequest criarMatriculaRequest){
 
         return ResponseEntity.status(HttpStatus.CREATED).body(matriculaService.criarMatricula(criarMatriculaRequest));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('Aluno')")
     public ResponseEntity<Void> cancelarMatricula(@PathVariable UUID id){
 
         matriculaService.cancelarMatricula(id);
@@ -37,6 +40,7 @@ public class MatriculaController {
 
     // Issue #3
     @GetMapping("/aluno/{idAluno}")
+    @PreAuthorize("hasRole('Aluno')")
     public ResponseEntity<List<CursoMatriculadoResponse>> listarCursosMatriculados(@PathVariable Long idAluno){
 
         return ResponseEntity.ok(matriculaService.listarCursosMatriculados(idAluno));
