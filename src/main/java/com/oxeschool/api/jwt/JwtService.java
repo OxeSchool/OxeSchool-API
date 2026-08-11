@@ -35,7 +35,7 @@ public class JwtService {
         this.audience = audience;
     }
 
-    public String criarAccessToken(Long id, String role){
+    private String criarAccessToken(Long id, String role){
 
         Instant expireTimeAccess = Instant.now()
                 .plus(Duration.ofMinutes(15));
@@ -54,7 +54,7 @@ public class JwtService {
 
     }
 
-    public String criarRefreshToken(Long id, String role){
+    private String criarRefreshToken(Long id, String role){
 
         Instant expireTimeRefresh = Instant.now()
                 .plus(Duration.ofDays(7));
