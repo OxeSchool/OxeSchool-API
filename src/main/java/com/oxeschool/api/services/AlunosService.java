@@ -6,6 +6,7 @@ import com.oxeschool.api.dtos.usuario.response.AuthResponse;
 import com.oxeschool.api.entity.AlunoEntity;
 import com.oxeschool.api.enums.TiposDeUsuarios;
 import com.oxeschool.api.exceptions.customs.aluno.AlunoJaExisteException;
+import com.oxeschool.api.exceptions.customs.usuario.UsuarioJaExisteException;
 import com.oxeschool.api.jwt.JwtService;
 import com.oxeschool.api.mappers.AlunoMapper;
 import com.oxeschool.api.repository.UsuariosRepository;
@@ -35,7 +36,7 @@ public class AlunosService {
         var jaExiste = usuariosRepository.existsByEmail(registrarAlunoRequest.getEmail());
 
         if (jaExiste){
-            throw new AlunoJaExisteException();
+            throw new UsuarioJaExisteException();
         }
 
         var senhaCriptografada = passwordEncoder.encode(registrarAlunoRequest.getSenha());
