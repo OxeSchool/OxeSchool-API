@@ -6,6 +6,7 @@ import com.oxeschool.api.entity.Curso.CursoEntity;
 import com.oxeschool.api.entity.Curso.Modulo;
 import com.oxeschool.api.enums.StatusCurso;
 import com.oxeschool.api.exceptions.customs.curso.*;
+import com.oxeschool.api.jwt.JwtService;
 import com.oxeschool.api.mappers.CursoMapper;
 import com.oxeschool.api.repository.CursosRepository;
 import org.springframework.stereotype.Service;
@@ -19,10 +20,14 @@ public class CursosService {
 
     final private CursosRepository cursosRepository;
     final private CursoMapper cursoMapper;
+    final private JwtService jwtService;
 
-    public CursosService(CursosRepository cursosRepository, CursoMapper cursoMapper) {
+    public CursosService(CursosRepository cursosRepository,
+                         CursoMapper cursoMapper,
+                         JwtService jwtService) {
         this.cursosRepository = cursosRepository;
         this.cursoMapper = cursoMapper;
+        this.jwtService = jwtService;
     }
 
     public CursoResponse criar(CriarCursoRequest criarCursoRequest) {
@@ -52,10 +57,18 @@ public class CursosService {
         return cursoMapper.toCursoResponse(cursoMapper.toCursoDomain(cursoSalvo));
     }
 
-    public CursoResponse editar(UUID cursoid, EditarCursoRequest editarCursoRequest) {
+    public CursoResponse editar(String token, UUID cursoId, EditarCursoRequest editarCursoRequest) {
 
-        var curso = cursosRepository.findById(cursoid)
+        token = jwtService.pegarToken(token);
+
+        var tokenDecodificado = jwtService.decodificarAccessToken(token);
+
+        var curso = cursosRepository.findById(cursoId)
                 .orElseThrow(CursoNaoEncontradoException::new);
+
+        if (!curso.getIdProfessor().equals(tokenDecodificado.getUserId())){
+            throw new CursoNaoPertenceAoProfessorException();
+        }
 
         curso.setNome(editarCursoRequest.getNome());
         curso.setDescricao(editarCursoRequest.getDescricao());
@@ -67,10 +80,18 @@ public class CursosService {
         return cursoMapper.toCursoResponse(cursoMapper.toCursoDomain(cursoSalvo));
     }
 
-    public CursoResponse editarStatus(UUID cursoid, EditarStatusCursoRequest editarStatusCursoRequest) {
+    public CursoResponse editarStatus(String token, UUID cursoid, EditarStatusCursoRequest editarStatusCursoRequest) {
+
+        token = jwtService.pegarToken(token);
+
+        var tokenDecodificado = jwtService.decodificarAccessToken(token);
 
         var curso = cursosRepository.findById(cursoid)
                 .orElseThrow(CursoNaoEncontradoException::new);
+
+        if (!curso.getIdProfessor().equals(tokenDecodificado.getUserId())){
+            throw new CursoNaoPertenceAoProfessorException();
+        }
 
         curso.setStatus(editarStatusCursoRequest.getStatus());
 
@@ -119,10 +140,18 @@ public class CursosService {
         return cursoMapper.toCursoResponse(cursoMapper.toCursoDomain(cursoSalvo));
     }
 
-    public CursoResponse editarModulo(UUID cursoId, UUID moduloId, EditarModuloRequest editarModuloRequest){
+    public CursoResponse editarModulo(String token,UUID cursoId, UUID moduloId, EditarModuloRequest editarModuloRequest){
+
+        token = jwtService.pegarToken(token);
+
+        var tokenDecodificado = jwtService.decodificarAccessToken(token);
 
         var curso = cursosRepository.findById(cursoId)
                 .orElseThrow(CursoNaoEncontradoException::new);
+
+        if (!curso.getIdProfessor().equals(tokenDecodificado.getUserId())){
+            throw new CursoNaoPertenceAoProfessorException();
+        }
 
         var modulos = curso.getModulos();
 
@@ -144,10 +173,18 @@ public class CursosService {
         return cursoMapper.toCursoResponse(cursoMapper.toCursoDomain(cursoSalvo));
     }
 
-    public CursoResponse excluirModulo(UUID cursoId, UUID moduloId){
+    public CursoResponse excluirModulo(String token, UUID cursoId, UUID moduloId){
+
+        token = jwtService.pegarToken(token);
+
+        var tokenDecodificado = jwtService.decodificarAccessToken(token);
 
         var curso = cursosRepository.findById(cursoId)
                 .orElseThrow(CursoNaoEncontradoException::new);
+
+        if (!curso.getIdProfessor().equals(tokenDecodificado.getUserId())){
+            throw new CursoNaoPertenceAoProfessorException();
+        }
 
         var modulos = curso.getModulos();
 
@@ -215,10 +252,18 @@ public class CursosService {
 
     }
 
-    public CursoResponse editarAula(UUID cursoId, UUID moduloId, UUID aulaId, EditarAulaRequest editarAulaRequest){
+    public CursoResponse editarAula(String token, UUID cursoId, UUID moduloId, UUID aulaId, EditarAulaRequest editarAulaRequest){
+
+        token = jwtService.pegarToken(token);
+
+        var tokenDecodificado = jwtService.decodificarAccessToken(token);
 
         var curso = cursosRepository.findById(cursoId)
                 .orElseThrow(CursoNaoEncontradoException::new);
+
+        if (!curso.getIdProfessor().equals(tokenDecodificado.getUserId())){
+            throw new CursoNaoPertenceAoProfessorException();
+        }
 
         var modulo = curso.getModulos()
                 .stream()
@@ -256,10 +301,18 @@ public class CursosService {
 
     }
 
-    public CursoResponse excluirAula(UUID cursoId, UUID moduloId, UUID aulaId){
+    public CursoResponse excluirAula(String token, UUID cursoId, UUID moduloId, UUID aulaId){
+
+        token = jwtService.pegarToken(token);
+
+        var tokenDecodificado = jwtService.decodificarAccessToken(token);
 
         var curso = cursosRepository.findById(cursoId)
                 .orElseThrow(CursoNaoEncontradoException::new);
+
+        if (!curso.getIdProfessor().equals(tokenDecodificado.getUserId())){
+            throw new CursoNaoPertenceAoProfessorException();
+        }
 
         var modulo = curso.getModulos()
                 .stream()
