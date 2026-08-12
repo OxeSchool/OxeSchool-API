@@ -7,13 +7,12 @@
     <!-- Dados pessoais -->
     <div class="ox-card mb-4">
         <div class="ox-card-body d-flex align-items-center gap-4">
-            <div class="rounded-circle bg-secondary-subtle d-flex align-items-center justify-content-center"
-                 style="width:72px;height:72px;font-size:1.6rem;color:var(--ox-primary-dark)">
+            <div class="ox-avatar">
                 <span th:text="${#strings.substring(usuario.nome,0,1)}">U</span>
             </div>
             <div>
-                <h1 class="h4 mb-1" th:text="${usuario.nome}">Nome do usuário</h1>
-                <p class="text-secondary mb-0" th:text="${usuario.email}">email@oxeschool.com</p>
+                <h1 class="h4 mb-1" id="perfilNome" th:text="${usuario.nome}">Nome do usuário</h1>
+                <p class="text-secondary mb-0" id="perfilEmail" th:text="${usuario.email}">email@oxeschool.com</p>
                 <span class="ox-chip mt-2" th:text="${usuario.tipo}">Aluno</span>
             </div>
             <a th:href="@{/perfil/editar}" class="btn btn-ox-outline btn-sm ms-auto">
@@ -37,7 +36,7 @@
         <!-- ================= VISÃO ALUNO ================= -->
         <div class="tab-pane fade show active" id="tab-aluno" th:if="${usuario.tipo == 'ALUNO'}">
 
-            <h2 class="h5 mb-3">Cursos em progresso</h2>
+            <h2 class="h5 ox-section-title"><i class="bi bi-hourglass-split"></i> Cursos em progresso</h2>
             <div class="ox-scroll-row mb-4">
                 <div class="ox-scroll-item" th:each="curso : ${cursosEmProgresso}">
                     <div class="ox-card">
@@ -53,7 +52,7 @@
                 </div>
             </div>
 
-            <h2 class="h5 mb-3">Cursos concluídos</h2>
+            <h2 class="h5 ox-section-title"><i class="bi bi-award"></i> Cursos concluídos</h2>
             <div class="ox-scroll-row">
                 <div class="ox-scroll-item" th:each="curso : ${cursosConcluidos}">
                     <div class="ox-card">
@@ -72,7 +71,7 @@
         <!-- ================= VISÃO PROFESSOR ================= -->
         <div class="tab-pane fade show active" id="tab-professor" th:if="${usuario.tipo == 'PROFESSOR'}">
 
-            <h2 class="h5 mb-3">Cursos em progresso</h2>
+            <h2 class="h5 ox-section-title"><i class="bi bi-easel"></i> Cursos em progresso</h2>
             <div class="ox-scroll-row mb-4">
                 <div class="ox-scroll-item" th:each="curso : ${cursosEmProgresso}">
                     <div class="ox-card">
@@ -91,7 +90,7 @@
                 </div>
             </div>
 
-            <h2 class="h5 mb-3">Cursos concluídos</h2>
+            <h2 class="h5 ox-section-title"><i class="bi bi-award"></i> Cursos concluídos</h2>
             <div class="ox-scroll-row">
                 <div class="ox-scroll-item" th:each="curso : ${cursosConcluidos}">
                     <div class="ox-card">
@@ -105,6 +104,18 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var usuario = JSON.parse(localStorage.getItem('oxeschool_usuario') || 'null');
+            if (!usuario) return;
+
+            var nome = document.getElementById('perfilNome');
+            var email = document.getElementById('perfilEmail');
+            if (nome) nome.textContent = usuario.nome;
+            if (email) email.textContent = usuario.email;
+        });
+    </script>
 
 </section>
 </body>

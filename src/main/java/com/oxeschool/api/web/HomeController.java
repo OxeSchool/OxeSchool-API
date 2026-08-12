@@ -1,32 +1,66 @@
 package com.oxeschool.api.web;
 
+import com.oxeschool.api.entity.Curso.CursoEntity;
+import com.oxeschool.api.enums.StatusCurso;
+import com.oxeschool.api.repository.CursosRepository;
+import com.oxeschool.api.repository.ProfessoresRepository;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Controller
 public class HomeController {
 
-    // TODO: injetar o CursoService real via construtor (@RequiredArgsConstructor do Lombok, por ex.)
+    private final CursosRepository cursosRepository;
+    private final ProfessoresRepository professoresRepository;
+
+    public HomeController(CursosRepository cursosRepository,
+                          ProfessoresRepository professoresRepository) {
+        this.cursosRepository = cursosRepository;
+        this.professoresRepository = professoresRepository;
+    }
 
     @GetMapping("/home")
     public String home(Model model) {
-        model.addAttribute("ultimosCursos", List.of(
-                Map.of("nome", "Java para iniciantes", "categoria", "Programação", "progresso", 62),
-                Map.of("nome", "Inglês instrumental", "categoria", "Idiomas", "progresso", 30)
-        ));
+        List<CursoEntity> cursos = cursosRepository
+                .findAllByStatus(PageRequest.of(0, 8), StatusCurso.ATIVO)
+                .getContent();
 
-        model.addAttribute("categorias", List.of("Programação", "Idiomas", "Design", "Matemática"));
+        List<Map<String, Object>> cursosDisponiveis = cursos.stream()
+                .map(curso -> {
+                    Map<String, Object> view = new HashMap<>();
+                    view.put("nome", curso.getNome());
+                    view.put("categoria", curso.getCategoria());
+                    view.put("professor", nomeDoProfessor(curso));
+                    return view;
+                })
+                .toList();
 
-        model.addAttribute("cursosDisponiveis", List.of(
-                Map.of("nome", "Spring Boot na prática", "categoria", "Programação", "professor", "Prof. Ana Souza"),
-                Map.of("nome", "Introdução ao Design", "categoria", "Design", "professor", "Prof. Caio Lima"),
-                Map.of("nome", "Matemática básica", "categoria", "Matemática", "professor", "Prof. Duda Reis")
-        ));
+        List<String> categorias = cursos.stream()
+                .map(CursoEntity::getCategoria)
+                .distinct()
+                .toList();
 
-        return "home/home"; // resolve para templates/home/home.html
+        // TODO: preencher "ultimosCursos" (com progresso) quando houver sessão/rastreio de acesso
+        model.addAttribute("ultimosCursos", List.of());
+        model.addAttribute("categorias", categorias);
+        model.addAttribute("cursosDisponiveis", cursosDisponiveis);
+
+        return "home/home";
     }
+
+    private String nomeDoProfessor(CursoEntity curso) {
+        if (curso.getIdProfessor() == null) {
+            return "—";
+        }
+        return professoresRepository.findById(curso.getIdProfessor())
+                .map(professor -> professor.getNome())
+                .orElse("—");
+    }
+
 }

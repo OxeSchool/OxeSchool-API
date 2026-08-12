@@ -110,6 +110,17 @@ h1, h2, h3, .ox-display {
     );
 }
 
+.ox-card-thumb {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ox-thumb-icon {
+    font-size: 2.2rem;
+    color: rgba(255, 255, 255, 0.9);
+}
+
 /* -------------------- Badges de categoria -------------------- */
 .ox-chip {
     display: inline-flex;

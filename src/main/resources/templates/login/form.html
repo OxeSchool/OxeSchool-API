@@ -3,9 +3,9 @@
       xmlns:th="http://www.thymeleaf.org">
 <body>
 <section>
-    <div class="row justify-content-center">
+    <div class="row justify-content-center py-4">
         <div class="col-12 col-sm-8 col-md-6 col-lg-4">
-            <div class="ox-card">
+            <div class="ox-card ox-form-card">
                 <div class="ox-card-body">
                     <h1 class="h4 mb-4 text-center">Entrar</h1>
 
@@ -36,7 +36,7 @@
                         <button type="submit" class="btn btn-ox-primary rounded-pill w-100">Entrar</button>
                     </form>
 
-                    <p class="text-center mt-3 mb-0">
+                    <p class="text-center mt-3 mb-0 ox-form-rodape">
                         <small>Não tem conta? <a href="/cadastro">Cadastre-se</a></small>
                     </p>
                 </div>
@@ -70,6 +70,7 @@
                 localStorage.setItem('oxeschool_token', dados.tokens.accessToken);
                 localStorage.setItem('oxeschool_refresh_token', dados.tokens.refreshToken);
                 localStorage.setItem('oxeschool_usuario', JSON.stringify(dados.usuario));
+                localStorage.setItem('oxeschool_tipo', tipo === 'professor' ? 'PROFESSOR' : 'ALUNO');
 
                 window.location.href = '/cursos';
             } catch (erro) {

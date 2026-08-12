@@ -4,29 +4,46 @@
 <body>
 <section>
 
+    <div class="ox-page-header">
+        <div>
+            <h1 class="h4">Matrículas</h1>
+            <p class="ox-page-sub">Vincule um aluno a um curso ativo.</p>
+        </div>
+    </div>
+
+    <div class="alert alert-success" role="alert" th:if="${sucesso}" th:text="${sucesso}"></div>
+    <div class="alert alert-danger" role="alert" th:if="${erro}" th:text="${erro}"></div>
+
     <div class="row g-4">
 
         <!-- Cadastro simples de matrícula -->
         <div class="col-lg-5">
-            <div class="ox-card">
+            <div class="ox-card ox-form-card">
                 <div class="ox-card-body">
-                    <h1 class="h5 mb-3">Nova matrícula</h1>
+                    <h2 class="h5 ox-section-title"><i class="bi bi-clipboard-plus"></i> Nova matrícula</h2>
                     <form th:action="@{/matriculas}" th:object="${matriculaForm}" method="post" class="d-flex flex-column gap-3">
 
                         <div>
-                            <label class="form-label small">Curso / Turma</label>
-                            <select class="form-select" th:field="*{cursoId}">
-                                <option th:each="curso : ${cursosDisponiveis}"
-                                        th:value="${curso.id}"
-                                        th:text="${curso.nome} + ' — ' + ${curso.turma}">Curso</option>
+                            <label class="form-label small">Aluno</label>
+                            <select id="alunoSelect" class="form-select ox-select-form" th:field="*{alunoId}"
+                                    th:classappend="${#fields.hasErrors('alunoId')} ? 'is-invalid'">
+                                <option th:each="aluno : ${alunosDisponiveis}" th:value="${aluno.id}" th:text="${aluno.nome}">Aluno</option>
                             </select>
+                            <div class="form-text" id="alunoSessaoInfo" hidden>
+                                Aluno da sessão atual — para alterá-lo, <a href="/login">saia da conta</a>.
+                            </div>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('alunoId')}" th:errors="*{alunoId}"></div>
                         </div>
 
                         <div>
-                            <label class="form-label small">Aluno</label>
-                            <select class="form-select" th:field="*{alunoId}">
-                                <option th:each="aluno : ${alunosDisponiveis}" th:value="${aluno.id}" th:text="${aluno.nome}">Aluno</option>
+                            <label class="form-label small">Curso / Turma</label>
+                            <select class="form-select ox-select-form" th:field="*{cursoId}"
+                                    th:classappend="${#fields.hasErrors('cursoId')} ? 'is-invalid'">
+                                <option th:each="curso : ${cursosDisponiveis}"
+                                        th:value="${curso.id}"
+                                        th:text="${curso.nome} + ' — ' + ${curso.categoria}">Curso</option>
                             </select>
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('cursoId')}" th:errors="*{cursoId}"></div>
                         </div>
 
                         <button type="submit" class="btn btn-ox-primary mt-2">
@@ -37,25 +54,31 @@
             </div>
         </div>
 
-        <!-- Dados da turma / professor -->
+        <!-- Matrículas recentes -->
         <div class="col-lg-7">
-            <h2 class="h5 mb-3">Matrículas recentes</h2>
+            <h2 class="h5 ox-section-title"><i class="bi bi-clock-history"></i> Matrículas recentes</h2>
             <div class="ox-card">
                 <div class="table-responsive">
-                    <table class="table mb-0 align-middle">
+                    <table class="table table-hover mb-0 align-middle ox-table">
                         <thead>
-                        <tr><th>Aluno</th><th>Curso</th><th>Turma</th><th>Professor</th><th>Data</th></tr>
+                        <tr><th>Aluno</th><th>Curso</th><th>Professor</th><th>Data</th><th>Status</th></tr>
                         </thead>
                         <tbody>
                         <tr th:each="m : ${matriculas}">
                             <td th:text="${m.aluno}">Aluno</td>
                             <td th:text="${m.curso}">Curso</td>
-                            <td th:text="${m.turma}">Turma</td>
                             <td th:text="${m.professor}">Professor</td>
                             <td th:text="${#temporals.format(m.data, 'dd/MM/yyyy')}">01/01/2026</td>
+                            <td>
+                                <span class="badge rounded-pill"
+                                      th:classappend="${m.status.name() == 'ATIVO'} ? 'text-bg-success' : 'text-bg-secondary'"
+                                      th:text="${m.status}">ATIVO</span>
+                            </td>
                         </tr>
-                        <tr th:if="${matriculas == null or #lists.isEmpty(matriculas)}">
-                            <td colspan="5" class="text-center text-secondary py-4">Nenhuma matrícula ainda</td>
+                        <tr th:if="${#lists.isEmpty(matriculas)}">
+                            <td colspan="5" class="ox-empty text-center">
+                                <span>Nenhuma matrícula ainda</span>
+                            </td>
                         </tr>
                         </tbody>
                     </table>
@@ -64,6 +87,30 @@
         </div>
 
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var tipo = localStorage.getItem('oxeschool_tipo');
+            var usuario = JSON.parse(localStorage.getItem('oxeschool_usuario') || 'null');
+
+            if (tipo !== 'ALUNO' || !usuario || !usuario.id) {
+                return;
+            }
+
+            var select = document.getElementById('alunoSelect');
+            var info = document.getElementById('alunoSessaoInfo');
+            if (!select || !info) return;
+
+            select.value = usuario.id;
+
+            if (select.value !== String(usuario.id)) {
+                return;
+            }
+
+            select.classList.add('d-none');
+            info.hidden = false;
+        });
+    </script>
 
 </section>
 </body>
