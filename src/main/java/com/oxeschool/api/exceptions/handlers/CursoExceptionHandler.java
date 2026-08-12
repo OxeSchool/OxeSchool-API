@@ -25,6 +25,11 @@ public class CursoExceptionHandler {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(new CustomErrorResponse(exception.getMessage(), 409));
     }
 
+    @ExceptionHandler(AulaNaoEncontrada.class)
+    public ResponseEntity<CustomErrorResponse> aulaNaoEncontradaExceptionHandler(AulaNaoEncontrada exception){
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CustomErrorResponse(exception.getMessage(), 404));
+    }
+
     @ExceptionHandler(CursoNaoEncontradoException.class)
     public ResponseEntity<CustomErrorResponse> cursoNaoEncontradoExceptionHandler(CursoNaoEncontradoException exception){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CustomErrorResponse(exception.getMessage(), 404));
