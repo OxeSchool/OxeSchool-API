@@ -31,4 +31,9 @@ public class PerfilController {
 
         return "perfil/perfil";
     }
+
+    @GetMapping("/perfil/editar")
+    public String editar() {
+        return "perfil/editar";
+    }
 }
