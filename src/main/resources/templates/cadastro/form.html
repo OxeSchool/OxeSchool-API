@@ -1,57 +1,61 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Cadastro de usuário')}"></head>
-<body class="bg-light">
-<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<html th:replace="~{fragments/layout :: page(titulo='Cadastro de usuário', conteudo=~{::section}, ativo='cadastro')}"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<section>
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-8 col-md-6 col-lg-5">
+            <div class="ox-card">
+                <div class="ox-card-body">
+                    <h1 class="h4 mb-4 text-center">Criar conta</h1>
 
-<div class="container" style="max-width: 480px;">
-    <div class="card shadow-sm">
-        <div class="card-body p-4">
-            <h1 class="h4 mb-4 text-center">Criar conta</h1>
+                    <div th:if="${erro}" class="alert alert-danger" role="alert" th:text="${erro}"></div>
 
-            <div th:if="${erro}" class="alert alert-danger" role="alert" th:text="${erro}"></div>
+                    <form th:action="@{/cadastro}" th:object="${cadastroForm}" method="post" novalidate>
 
-            <form th:action="@{/cadastro}" th:object="${cadastroForm}" method="post" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label d-block">Eu sou</label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" th:field="*{tipo}" value="ALUNO" id="tipoAluno">
+                                <label class="btn btn-ox-outline" for="tipoAluno">Aluno</label>
 
-                <div class="mb-3">
-                    <label class="form-label d-block">Eu sou</label>
-                    <div class="btn-group w-100" role="group">
-                        <input type="radio" class="btn-check" th:field="*{tipo}" value="ALUNO" id="tipoAluno">
-                        <label class="btn btn-outline-primary" for="tipoAluno">Aluno</label>
+                                <input type="radio" class="btn-check" th:field="*{tipo}" value="PROFESSOR" id="tipoProfessor">
+                                <label class="btn btn-ox-outline" for="tipoProfessor">Professor</label>
+                            </div>
+                        </div>
 
-                        <input type="radio" class="btn-check" th:field="*{tipo}" value="PROFESSOR" id="tipoProfessor">
-                        <label class="btn btn-outline-primary" for="tipoProfessor">Professor</label>
-                    </div>
+                        <div class="mb-3">
+                            <label for="nome" class="form-label">Nome</label>
+                            <input type="text" class="form-control" id="nome" th:field="*{nome}"
+                                   th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" th:field="*{email}"
+                                   th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="senha" class="form-label">Senha</label>
+                            <input type="password" class="form-control" id="senha" th:field="*{senha}"
+                                   th:classappend="${#fields.hasErrors('senha')} ? 'is-invalid'">
+                            <div class="invalid-feedback" th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></div>
+                            <div class="form-text">Mínimo de 8 caracteres.</div>
+                        </div>
+
+                        <button type="submit" class="btn btn-ox-primary rounded-pill w-100">Cadastrar</button>
+                    </form>
+
+                    <p class="text-center mt-3 mb-0">
+                        <small>Já tem conta? <a href="/login">Entrar</a></small>
+                    </p>
                 </div>
-
-                <div class="mb-3">
-                    <label for="nome" class="form-label">Nome</label>
-                    <input type="text" class="form-control" id="nome" th:field="*{nome}"
-                           th:classappend="${#fields.hasErrors('nome')} ? 'is-invalid'">
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
-                </div>
-
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" th:field="*{email}"
-                           th:classappend="${#fields.hasErrors('email')} ? 'is-invalid'">
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
-                </div>
-
-                <div class="mb-4">
-                    <label for="senha" class="form-label">Senha</label>
-                    <input type="password" class="form-control" id="senha" th:field="*{senha}"
-                           th:classappend="${#fields.hasErrors('senha')} ? 'is-invalid'">
-                    <div class="invalid-feedback" th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}"></div>
-                    <div class="form-text">Mínimo de 8 caracteres.</div>
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100">Cadastrar</button>
-            </form>
+            </div>
         </div>
     </div>
-</div>
-
-<script th:replace="~{fragments/layout :: scripts}"></script>
+</section>
 </body>
 </html>
