@@ -1,6 +1,7 @@
 package com.oxeschool.api.controllers;
 
 import com.oxeschool.api.dtos.matricula.AlunoMatriculadoResponse;
+import com.oxeschool.api.dtos.matricula.CursoMatriculadoResponse;
 import com.oxeschool.api.dtos.matricula.MatriculaResponse;
 import com.oxeschool.api.dtos.matricula.CriarMatriculaRequest;
 import com.oxeschool.api.services.MatriculaService;
@@ -17,7 +18,7 @@ public class MatriculaController {
 
     final private MatriculaService matriculaService;
 
-    public  MatriculaController(MatriculaService matriculaService) {
+    public MatriculaController(MatriculaService matriculaService) {
         this.matriculaService = matriculaService;
     }
 
@@ -32,7 +33,14 @@ public class MatriculaController {
 
         matriculaService.cancelarMatricula(id);
 
-        return  ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
+
+    // Issue #3
+    @GetMapping("/aluno/{idAluno}")
+    public ResponseEntity<List<CursoMatriculadoResponse>> listarCursosMatriculados(@PathVariable Long idAluno){
+
+        return ResponseEntity.ok(matriculaService.listarCursosMatriculados(idAluno));
     }
 
     @GetMapping("/curso/{idCurso}")

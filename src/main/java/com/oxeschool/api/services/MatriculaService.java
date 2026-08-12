@@ -1,6 +1,7 @@
 package com.oxeschool.api.services;
 
 import com.oxeschool.api.dtos.matricula.AlunoMatriculadoResponse;
+import com.oxeschool.api.dtos.matricula.CursoMatriculadoResponse;
 import com.oxeschool.api.dtos.matricula.MatriculaResponse;
 import com.oxeschool.api.dtos.matricula.CriarMatriculaRequest;
 import com.oxeschool.api.entity.MatriculaEntity;
@@ -121,6 +122,24 @@ public class MatriculaService {
                     );
                 })
                 .collect(Collectors.toList());
+    // Issue #3 - lista os cursos em que o aluno está/esteve matriculado
+    public List<CursoMatriculadoResponse> listarCursosMatriculados(Long idAluno) {
+
+        var matriculas = matriculasRepository.findByIdAluno(idAluno);
+
+        return matriculas.stream()
+                .map(matricula -> {
+                    var curso = cursosRepository.findById(matricula.getIdCurso())
+                            .orElseThrow(CursoNaoEncontradoException::new);
+
+                    return new CursoMatriculadoResponse(
+                            curso.getId(),
+                            curso.getNome(),
+                            matricula.getStatus(),
+                            matricula.getDataMatricula()
+                    );
+                })
+                .toList();
     }
 
 }

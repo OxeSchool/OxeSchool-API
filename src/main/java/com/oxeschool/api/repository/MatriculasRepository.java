@@ -13,5 +13,6 @@ public interface MatriculasRepository extends MongoRepository<MatriculaEntity, U
     Boolean existsByIdAlunoAndIdCurso(Long idAluno, UUID idCurso);
 
     List<MatriculaEntity> findByIdCursoAndStatus(UUID idCurso, StatusCurso status);
-
-}  
+  
+    List<MatriculaEntity> findByIdAluno(Long idAluno);
+}
