@@ -23,5 +23,6 @@ public class CursoResponse {
     private Long cargaHoraria;
     private List<Modulo> modulos;
     private StatusCurso status;
+    private String professorNome;
 
 }

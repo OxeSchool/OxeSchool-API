@@ -4,6 +4,34 @@
 
 --- 
 
+### GET `/`
+
+Lists courses with `status: ATIVO` only.
+
+Response body expected:
+
+   ```
+   [
+    {
+        "id": UUID
+        "idProfessor": Long
+        "professorNome": String
+        "nome": String
+        "descricao": String
+        "categoria": String
+        "cargaHoraria": Long
+        "modulos": []
+        "status": "ATIVO"
+    }
+   ]
+   ```
+
+#### Returns
+
+* `200 - OK` - Sucess.
+
+--- 
+
 ### GET `/{id}`
 
 Response body expected:

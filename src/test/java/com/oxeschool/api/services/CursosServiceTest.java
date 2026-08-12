@@ -14,8 +14,10 @@ import com.oxeschool.api.exceptions.customs.curso.CursoJaExisteException;
 import com.oxeschool.api.exceptions.customs.curso.CursoNaoEncontradoException;
 import com.oxeschool.api.exceptions.customs.curso.ModuloJaExisteException;
 import com.oxeschool.api.exceptions.customs.curso.ModuloNaoEncontradoException;
+import com.oxeschool.api.entity.ProfessorEntity;
 import com.oxeschool.api.mappers.CursoMapper;
 import com.oxeschool.api.repository.CursosRepository;
+import com.oxeschool.api.repository.ProfessoresRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -42,6 +44,8 @@ class CursosServiceTest {
     private CursosRepository cursosRepository;
     @Mock
     private CursoMapper cursoMapper;
+    @Mock
+    private ProfessoresRepository professoresRepository;
 
     @InjectMocks
     private CursosService cursosService;
@@ -64,7 +68,7 @@ class CursosServiceTest {
 
 
         var domain = new CursoDomain(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L, new ArrayList<>(), StatusCurso.ATIVO);
-        var response = new CursoResponse(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L, new ArrayList<>(), StatusCurso.ATIVO);
+        var response = new CursoResponse(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L, new ArrayList<>(), StatusCurso.ATIVO, null);
 
         when(cursosRepository.existsByNomeAndIdProfessor("Java", 1L)).thenReturn(false);
         when(cursosRepository.save(any(CursoEntity.class))).thenReturn(cursoSalvo);
@@ -105,7 +109,7 @@ class CursosServiceTest {
                 .build();
 
         var domain = new CursoDomain(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L, new ArrayList<>(), StatusCurso.ATIVO);
-        var response = new CursoResponse(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L, new ArrayList<>(), StatusCurso.ATIVO);
+        var response = new CursoResponse(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L, new ArrayList<>(), StatusCurso.ATIVO, null);
 
         when(cursosRepository.findById(cursoId)).thenReturn(Optional.of(curso));
         when(cursoMapper.toCursoDomain(curso)).thenReturn(domain);
@@ -123,6 +127,42 @@ class CursosServiceTest {
         when(cursosRepository.findById(cursoId)).thenReturn(Optional.empty());
 
         assertThrows(CursoNaoEncontradoException.class, () -> cursosService.pegarCursoPorId(cursoId));
+    }
+
+    @Test
+    void listarDisponiveis_deveRetornarSomenteCursosAtivosComNomeDoProfessor() {
+        var cursoId = UUID.randomUUID();
+
+        var curso = CursoEntity.builder()
+                .id(cursoId)
+                .nome("Java")
+                .descricao("Curso de java")
+                .categoria("tecnologia")
+                .cargaHoraria(60L)
+                .idProfessor(1L)
+                .modulos(new ArrayList<>())
+                .status(StatusCurso.ATIVO)
+                .build();
+
+        var professor = ProfessorEntity.builder()
+                .id(1L)
+                .nome("Prof. Carla Menezes")
+                .email("carla@oxeschool.com")
+                .build();
+
+        var domain = new CursoDomain(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L, new ArrayList<>(), StatusCurso.ATIVO);
+        var response = new CursoResponse(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L, new ArrayList<>(), StatusCurso.ATIVO, null);
+
+        when(cursosRepository.findByStatus(StatusCurso.ATIVO)).thenReturn(List.of(curso));
+        when(cursoMapper.toCursoDomain(curso)).thenReturn(domain);
+        when(cursoMapper.toCursoResponse(domain)).thenReturn(response);
+        when(professoresRepository.findById(1L)).thenReturn(java.util.Optional.of(professor));
+
+        var resultado = cursosService.listarDisponiveis();
+
+        assertEquals(1, resultado.size());
+        assertEquals("Java", resultado.get(0).getNome());
+        assertEquals("Prof. Carla Menezes", resultado.get(0).getProfessorNome());
     }
 
     @Test
@@ -152,7 +192,7 @@ class CursosServiceTest {
                 .build();
 
         var domain = new CursoDomain(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L, cursoComModulo.getModulos(), StatusCurso.ATIVO);
-        var response = new CursoResponse(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L, cursoComModulo.getModulos(), StatusCurso.ATIVO);
+        var response = new CursoResponse(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L, cursoComModulo.getModulos(), StatusCurso.ATIVO, null);
 
         when(cursosRepository.findById(cursoId)).thenReturn(Optional.of(curso));
         when(cursosRepository.save(any(CursoEntity.class))).thenReturn(cursoComModulo);
@@ -215,7 +255,7 @@ class CursosServiceTest {
                 .modulos(new ArrayList<>(List.of(moduloComAula))).build();
 
         var domain = new CursoDomain(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L, cursoComAula.getModulos(), StatusCurso.ATIVO);
-        var response = new CursoResponse(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L,cursoComAula.getModulos(), StatusCurso.ATIVO);
+        var response = new CursoResponse(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L,cursoComAula.getModulos(), StatusCurso.ATIVO, null);
 
 
         when(cursosRepository.findById(cursoId)).thenReturn(Optional.of(curso));

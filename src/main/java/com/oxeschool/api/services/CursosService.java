@@ -11,9 +11,11 @@ import com.oxeschool.api.enums.StatusCurso;
 import com.oxeschool.api.exceptions.customs.curso.*;
 import com.oxeschool.api.mappers.CursoMapper;
 import com.oxeschool.api.repository.CursosRepository;
+import com.oxeschool.api.repository.ProfessoresRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -22,10 +24,12 @@ public class CursosService {
 
     final private CursosRepository cursosRepository;
     final private CursoMapper cursoMapper;
+    final private ProfessoresRepository professoresRepository;
 
-    public CursosService(CursosRepository cursosRepository, CursoMapper cursoMapper) {
+    public CursosService(CursosRepository cursosRepository, CursoMapper cursoMapper, ProfessoresRepository professoresRepository) {
         this.cursosRepository = cursosRepository;
         this.cursoMapper = cursoMapper;
+        this.professoresRepository = professoresRepository;
     }
 
     public CursoResponse criar(CriarCursoRequest criarCursoRequest) {
@@ -60,7 +64,27 @@ public class CursosService {
         var curso = cursosRepository.findById(id)
                 .orElseThrow(CursoNaoEncontradoException::new);
 
-        return cursoMapper.toCursoResponse(cursoMapper.toCursoDomain(curso));
+        return mapearParaResponse(curso);
+
+    }
+
+    public List<CursoResponse> listarDisponiveis(){
+
+        return cursosRepository.findByStatus(StatusCurso.ATIVO)
+                .stream()
+                .map(this::mapearParaResponse)
+                .toList();
+
+    }
+
+    private CursoResponse mapearParaResponse(CursoEntity curso){
+
+        var response = cursoMapper.toCursoResponse(cursoMapper.toCursoDomain(curso));
+
+        professoresRepository.findById(curso.getIdProfessor())
+                .ifPresent(professor -> response.setProfessorNome(professor.getNome()));
+
+        return response;
 
     }
 

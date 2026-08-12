@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -20,6 +21,12 @@ public class CursosController {
 
     public CursosController(CursosService cursosService) {
         this.cursosService = cursosService;
+    }
+
+    @GetMapping
+    public ResponseEntity<List<CursoResponse>> listarCursosDisponiveis(){
+
+        return ResponseEntity.ok(cursosService.listarDisponiveis());
     }
 
     @GetMapping("/{id}")
