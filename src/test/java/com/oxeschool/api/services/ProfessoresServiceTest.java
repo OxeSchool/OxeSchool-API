@@ -64,9 +64,9 @@ class ProfessoresServiceTest {
 
         var resultado = professoresService.registrar(request);
 
-        assertEquals(1L, resultado.getId());
-        assertEquals("carlos@email.com", resultado.getEmail());
-        assertEquals("Prof. Carlos", resultado.getNome());
+        assertEquals(1L, resultado.getUsuario().getId());
+        assertEquals("carlos@email.com", resultado.getUsuario().getEmail());
+        assertEquals("Prof. Carlos", resultado.getUsuario().getNome());
         verify(passwordEncoder).encode("senha123");
         verify(professoresRepository).save(any(ProfessorEntity.class));
     }
