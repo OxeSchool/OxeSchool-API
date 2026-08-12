@@ -36,7 +36,7 @@ public class CursosController {
     @PreAuthorize("hasRole('Professor')")
     public ResponseEntity<CursoResponse> editarCurso(@PathVariable UUID cursoId, @RequestBody EditarCursoRequest editarCursoRequest) {
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.editar(cursoId, editarCursoRequest));
+        return ResponseEntity.status(HttpStatus.OK).body(cursosService.editar(cursoId, editarCursoRequest));
     }
 
     @PostMapping("/{cursoId}/modulo")
@@ -46,6 +46,12 @@ public class CursosController {
         return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.adicionarModulo(cursoId, criarModuloRequest));
     }
 
+    @PutMapping("/{cursoId}/modulo/{moduloId}")
+    @PreAuthorize("hasRole('Professor')")
+    public ResponseEntity<CursoResponse> editarModulo(@PathVariable UUID cursoId, @PathVariable UUID moduloId, @RequestBody EditarModuloRequest editarModuloRequest) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(cursosService.editarModulo(cursoId, moduloId, editarModuloRequest));
+    }
 
     @PostMapping("/{cursoId}/modulo/{moduloId}/aula")
     @PreAuthorize("hasRole('Professor')")

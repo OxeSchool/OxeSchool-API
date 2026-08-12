@@ -107,6 +107,31 @@ public class CursosService {
         return cursoMapper.toCursoResponse(cursoMapper.toCursoDomain(cursoSalvo));
     }
 
+    public CursoResponse editarModulo(UUID cursoId, UUID moduloId, EditarModuloRequest editarModuloRequest){
+
+        var curso = cursosRepository.findById(cursoId)
+                .orElseThrow(CursoNaoEncontradoException::new);
+
+        var modulos = curso.getModulos();
+
+        var modulo = modulos.stream()
+                .filter(m -> m.getId().equals(moduloId))
+                .findFirst()
+                .orElseThrow(ModuloNaoEncontradoException::new);
+
+        var moduloIndex = modulos.indexOf(modulo);
+
+        modulo.setNome(editarModuloRequest.getNome());
+
+        modulos.set(moduloIndex, modulo);
+
+        curso.setModulos(modulos);
+
+        var cursoSalvo = cursosRepository.save(curso);
+
+        return cursoMapper.toCursoResponse(cursoMapper.toCursoDomain(cursoSalvo));
+    }
+
     public CursoResponse adicionarAula(UUID cursoId, UUID moduloId, CriarAulaRequest criarAulaRequest){
 
         var curso = cursosRepository.findById(cursoId)
