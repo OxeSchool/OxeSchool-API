@@ -21,7 +21,8 @@ public class CursosController {
         this.cursosService = cursosService;
     }
 
-    @GetMapping()
+    @GetMapping
+    @PreAuthorize("hasRole('Aluno')")
     public ResponseEntity<Page<CursoResponse>> pegarCursosDisponiveis(Pageable pageable){
 
         return ResponseEntity.status(HttpStatus.OK).body(cursosService.pegarCursos(pageable));
