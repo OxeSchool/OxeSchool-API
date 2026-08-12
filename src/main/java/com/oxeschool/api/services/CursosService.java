@@ -9,6 +9,8 @@ import com.oxeschool.api.exceptions.customs.curso.*;
 import com.oxeschool.api.jwt.JwtService;
 import com.oxeschool.api.mappers.CursoMapper;
 import com.oxeschool.api.repository.CursosRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -28,6 +30,11 @@ public class CursosService {
         this.cursosRepository = cursosRepository;
         this.cursoMapper = cursoMapper;
         this.jwtService = jwtService;
+    }
+
+    public Page<CursoResponse> pegarCursos(Pageable pageable){
+        return cursosRepository.findAllByStatus(pageable, StatusCurso.ATIVO)
+                .map(p -> cursoMapper.toCursoResponse(cursoMapper.toCursoDomain(p)));
     }
 
     public CursoResponse criar(CriarCursoRequest criarCursoRequest) {
