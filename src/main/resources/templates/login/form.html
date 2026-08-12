@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: page(titulo='Login', conteudo=~{::section}, ativo='login')}"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<section>
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-8 col-md-6 col-lg-4">
+            <div class="ox-card">
+                <div class="ox-card-body">
+                    <h1 class="h4 mb-4 text-center">Entrar</h1>
+
+                    <div id="loginAlert" class="alert alert-danger d-none" role="alert"></div>
+
+                    <form id="loginForm" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label d-block">Eu sou</label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="tipo" value="aluno" id="tipoAluno" checked>
+                                <label class="btn btn-ox-outline" for="tipoAluno">Aluno</label>
+
+                                <input type="radio" class="btn-check" name="tipo" value="professor" id="tipoProfessor">
+                                <label class="btn btn-ox-outline" for="tipoProfessor">Professor</label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="senha" class="form-label">Senha</label>
+                            <input type="password" class="form-control" id="senha" name="senha" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-ox-primary rounded-pill w-100">Entrar</button>
+                    </form>
+
+                    <p class="text-center mt-3 mb-0">
+                        <small>Não tem conta? <a href="/cadastro">Cadastre-se</a></small>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        document.getElementById('loginForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            var alertBox = document.getElementById('loginAlert');
+            alertBox.classList.add('d-none');
+
+            var tipo = document.querySelector('input[name="tipo"]:checked').value;
+            var email = document.getElementById('email').value;
+            var senha = document.getElementById('senha').value;
+
+            try {
+                var response = await fetch('/login/' + tipo, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, senha: senha })
+                });
+
+                if (!response.ok) {
+                    throw new Error('Email ou senha inválidos.');
+                }
+
+                var dados = await response.json();
+                localStorage.setItem('oxeschool_token', dados.tokens.accessToken);
+                localStorage.setItem('oxeschool_refresh_token', dados.tokens.refreshToken);
+                localStorage.setItem('oxeschool_usuario', JSON.stringify(dados.usuario));
+
+                window.location.href = '/cursos';
+            } catch (erro) {
+                alertBox.textContent = erro.message;
+                alertBox.classList.remove('d-none');
+            }
+        });
+    </script>
+</section>
+</body>
+</html>

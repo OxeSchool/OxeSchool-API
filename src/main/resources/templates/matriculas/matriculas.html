@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: page(titulo='Matrículas', conteudo=~{::section}, ativo='matriculas')}"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<section>
+
+    <div class="row g-4">
+
+        <!-- Cadastro simples de matrícula -->
+        <div class="col-lg-5">
+            <div class="ox-card">
+                <div class="ox-card-body">
+                    <h1 class="h5 mb-3">Nova matrícula</h1>
+                    <form th:action="@{/matriculas}" th:object="${matriculaForm}" method="post" class="d-flex flex-column gap-3">
+
+                        <div>
+                            <label class="form-label small">Curso / Turma</label>
+                            <select class="form-select" th:field="*{cursoId}">
+                                <option th:each="curso : ${cursosDisponiveis}"
+                                        th:value="${curso.id}"
+                                        th:text="${curso.nome} + ' — ' + ${curso.turma}">Curso</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="form-label small">Aluno</label>
+                            <select class="form-select" th:field="*{alunoId}">
+                                <option th:each="aluno : ${alunosDisponiveis}" th:value="${aluno.id}" th:text="${aluno.nome}">Aluno</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-ox-primary mt-2">
+                            <i class="bi bi-check2-circle"></i> Confirmar matrícula
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dados da turma / professor -->
+        <div class="col-lg-7">
+            <h2 class="h5 mb-3">Matrículas recentes</h2>
+            <div class="ox-card">
+                <div class="table-responsive">
+                    <table class="table mb-0 align-middle">
+                        <thead>
+                        <tr><th>Aluno</th><th>Curso</th><th>Turma</th><th>Professor</th><th>Data</th></tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="m : ${matriculas}">
+                            <td th:text="${m.aluno}">Aluno</td>
+                            <td th:text="${m.curso}">Curso</td>
+                            <td th:text="${m.turma}">Turma</td>
+                            <td th:text="${m.professor}">Professor</td>
+                            <td th:text="${#temporals.format(m.data, 'dd/MM/yyyy')}">01/01/2026</td>
+                        </tr>
+                        <tr th:if="${matriculas == null or #lists.isEmpty(matriculas)}">
+                            <td colspan="5" class="text-center text-secondary py-4">Nenhuma matrícula ainda</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</section>
+</body>
+</html>

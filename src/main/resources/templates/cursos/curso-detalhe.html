@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: page(titulo=${naoEncontrado} ? 'Curso não encontrado' : ${curso.nome}, conteudo=~{::section}, ativo='cursos')}"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<section th:if="${naoEncontrado}">
+    <div class="ox-card p-4 text-center">
+        <p class="mb-3">Curso não encontrado.</p>
+        <a href="/cursos" class="btn btn-ox-outline rounded-pill">
+            <i class="bi bi-arrow-left"></i> Voltar para cursos
+        </a>
+    </div>
+    <script>
+        if (!localStorage.getItem('oxeschool_token')) {
+            window.location.href = '/login';
+        }
+    </script>
+</section>
+
+<section th:if="${curso != null}">
+
+    <div class="ox-card mb-4">
+        <div class="ox-card-thumb" style="height:140px"></div>
+        <div class="ox-card-body">
+            <span class="ox-chip mb-2" th:text="${curso.categoria}">Categoria</span>
+            <h1 class="h4 mb-2" th:text="${curso.nome}">Nome do curso</h1>
+            <p class="mb-3" th:text="${curso.descricao}">Descrição do curso</p>
+            <div class="d-flex flex-wrap gap-3 small text-secondary align-items-center">
+                <span><i class="bi bi-person-badge"></i> <span th:text="${curso.professor}">Professor</span></span>
+                <span><i class="bi bi-clock"></i> <span th:text="${curso.cargaHoraria} + ' horas'">40 horas</span></span>
+                <span class="badge rounded-pill" th:classappend="${curso.status.name() == 'ATIVO'} ? 'text-bg-success' : 'text-bg-secondary'"
+                      th:text="${curso.status}">ATIVO</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= VISÃO ALUNO ================= -->
+    <div th:if="${papel == 'ALUNO'}">
+
+        <div th:if="${curso.matriculado == false}" class="ox-card p-4 text-center">
+            <p class="mb-3">Você ainda não está matriculado neste curso.</p>
+            <a href="/matriculas" class="btn btn-ox-primary rounded-pill px-4">
+                <i class="bi bi-check2-circle"></i> Matricular-se
+            </a>
+        </div>
+
+        <div th:if="${curso.matriculado == true}">
+            <div class="row g-3 mb-4">
+                <div class="col-md-6">
+                    <a th:href="@{/cursos/{id}/professor(id=${curso.id})}" class="ox-card d-block p-3 text-decoration-none text-dark">
+                        <i class="bi bi-person-badge"></i> Ver informações do professor
+                    </a>
+                </div>
+                <div class="col-md-6">
+                    <a th:href="@{/cursos/{id}/materias(id=${curso.id})}" class="ox-card d-block p-3 text-decoration-none text-dark">
+                        <i class="bi bi-file-earmark-text"></i> Materiais (PDFs, docs...)
+                    </a>
+                </div>
+            </div>
+
+            <h2 class="h5 mb-3">Aulas</h2>
+            <div class="list-group mb-4">
+                <a th:each="aula : ${aulas}" th:href="@{/cursos/{id}/aulas/{aulaId}(id=${curso.id},aulaId=${aula.id})}"
+                   class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+        <span>
+          <i class="bi" th:classappend="${aula.concluida} ? 'bi-check-circle-fill text-success' : 'bi-play-circle'"></i>
+          <span th:text="${aula.titulo}">Aula</span>
+        </span>
+                    <span class="badge text-bg-light rounded-pill" th:text="${aula.duracao}">10min</span>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= VISÃO PROFESSOR ================= -->
+    <div th:if="${papel == 'PROFESSOR'}">
+        <ul class="nav ox-role-tabs mb-3">
+            <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-turma">Turma</button></li>
+            <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#tab-aluno-info">Progresso individual</button></li>
+        </ul>
+
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="tab-turma">
+                <div class="table-responsive ox-card">
+                    <table class="table mb-0 align-middle">
+                        <thead>
+                        <tr><th>Aluno</th><th>Progresso</th><th></th></tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="aluno : ${alunosDaTurma}">
+                            <td th:text="${aluno.nome}">Nome</td>
+                            <td style="width:220px">
+                                <div class="ox-progress"><div class="ox-progress-bar" th:style="'width:' + ${aluno.progresso} + '%'"></div></div>
+                            </td>
+                            <td class="text-end">
+                                <a th:href="@{/cursos/{id}/alunos/{alunoId}(id=${curso.id},alunoId=${aluno.id})}" class="small">
+                                    Frequência e notas →
+                                </a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="tab-pane fade" id="tab-aluno-info">
+                <p class="text-secondary">Selecione um aluno na aba Turma para ver frequência e notas.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        if (!localStorage.getItem('oxeschool_token')) {
+            window.location.href = '/login';
+        }
+    </script>
+</section>
+</body>
+</html>
