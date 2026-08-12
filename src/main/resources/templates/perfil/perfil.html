@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: page(titulo='Perfil', conteudo=~{::section}, ativo='perfil')}"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<section>
+
+    <!-- Dados pessoais -->
+    <div class="ox-card mb-4">
+        <div class="ox-card-body d-flex align-items-center gap-4">
+            <div class="rounded-circle bg-secondary-subtle d-flex align-items-center justify-content-center"
+                 style="width:72px;height:72px;font-size:1.6rem;color:var(--ox-primary-dark)">
+                <span th:text="${#strings.substring(usuario.nome,0,1)}">U</span>
+            </div>
+            <div>
+                <h1 class="h4 mb-1" th:text="${usuario.nome}">Nome do usuário</h1>
+                <p class="text-secondary mb-0" th:text="${usuario.email}">email@oxeschool.com</p>
+                <span class="ox-chip mt-2" th:text="${usuario.tipo}">Aluno</span>
+            </div>
+            <a th:href="@{/perfil/editar}" class="btn btn-ox-outline btn-sm ms-auto">
+                <i class="bi bi-pencil"></i> Editar dados
+            </a>
+        </div>
+    </div>
+
+    <!-- Abas por papel: aluno mostra as dele, professor mostra as dele -->
+    <ul class="nav ox-role-tabs mb-3" id="perfilTabs" role="tablist">
+        <li class="nav-item" th:if="${usuario.tipo == 'ALUNO'}">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-aluno">Como aluno</button>
+        </li>
+        <li class="nav-item" th:if="${usuario.tipo == 'PROFESSOR'}">
+            <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#tab-professor">Como professor</button>
+        </li>
+    </ul>
+
+    <div class="tab-content">
+
+        <!-- ================= VISÃO ALUNO ================= -->
+        <div class="tab-pane fade show active" id="tab-aluno" th:if="${usuario.tipo == 'ALUNO'}">
+
+            <h2 class="h5 mb-3">Cursos em progresso</h2>
+            <div class="ox-scroll-row mb-4">
+                <div class="ox-scroll-item" th:each="curso : ${cursosEmProgresso}">
+                    <div class="ox-card">
+                        <div class="ox-card-thumb"></div>
+                        <div class="ox-card-body">
+                            <h3 class="h6 mb-1" th:text="${curso.nome}">Curso</h3>
+                            <div class="ox-progress my-2">
+                                <div class="ox-progress-bar" th:style="'width:' + ${curso.progresso} + '%'"></div>
+                            </div>
+                            <a th:href="@{/cursos/{id}(id=${curso.id})}" class="small">Ir para o ambiente de aula →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="h5 mb-3">Cursos concluídos</h2>
+            <div class="ox-scroll-row">
+                <div class="ox-scroll-item" th:each="curso : ${cursosConcluidos}">
+                    <div class="ox-card">
+                        <div class="ox-card-thumb"></div>
+                        <div class="ox-card-body">
+                            <h3 class="h6 mb-1" th:text="${curso.nome}">Curso</h3>
+                            <a th:href="@{/certificados/{id}(id=${curso.id})}" class="small">
+                                <i class="bi bi-award"></i> Ver certificado
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= VISÃO PROFESSOR ================= -->
+        <div class="tab-pane fade show active" id="tab-professor" th:if="${usuario.tipo == 'PROFESSOR'}">
+
+            <h2 class="h5 mb-3">Cursos em progresso</h2>
+            <div class="ox-scroll-row mb-4">
+                <div class="ox-scroll-item" th:each="curso : ${cursosEmProgresso}">
+                    <div class="ox-card">
+                        <div class="ox-card-thumb"></div>
+                        <div class="ox-card-body">
+                            <h3 class="h6 mb-1" th:text="${curso.nome}">Curso</h3>
+                            <p class="small text-secondary mb-2" th:text="${curso.qtdAlunos} + ' alunos matriculados'">0 alunos</p>
+                            <div class="d-flex gap-2">
+                                <a th:href="@{/cursos/{id}/turma(id=${curso.id})}" class="small">Ver turma</a>
+                                <a th:href="@{/cursos/{id}/configuracoes(id=${curso.id})}" class="small text-secondary">
+                                    <i class="bi bi-gear"></i> Configurar
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="h5 mb-3">Cursos concluídos</h2>
+            <div class="ox-scroll-row">
+                <div class="ox-scroll-item" th:each="curso : ${cursosConcluidos}">
+                    <div class="ox-card">
+                        <div class="ox-card-thumb"></div>
+                        <div class="ox-card-body">
+                            <h3 class="h6 mb-1" th:text="${curso.nome}">Curso</h3>
+                            <a th:href="@{/cursos/{id}/turma(id=${curso.id})}" class="small">Ver curso e turma →</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+</body>
+</html>
