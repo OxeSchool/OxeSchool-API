@@ -30,6 +30,11 @@ public class CursoExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CustomErrorResponse(exception.getMessage(), 404));
     }
 
+    @ExceptionHandler(CursoNaoPertenceAoProfessorException.class)
+    public ResponseEntity<CustomErrorResponse> cursoNaoPertenceAoProfessorExceptionHandler(CursoNaoPertenceAoProfessorException exception){
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new CustomErrorResponse(exception.getMessage(), 403));
+    }
+
     @ExceptionHandler(ModuloNaoEncontradoException.class)
     public ResponseEntity<CustomErrorResponse> moduloNaoEncontradoExceptionHandler(ModuloNaoEncontradoException exception){
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new CustomErrorResponse(exception.getMessage(), 404));

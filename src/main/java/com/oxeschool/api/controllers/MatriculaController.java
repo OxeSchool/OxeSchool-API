@@ -1,5 +1,6 @@
 package com.oxeschool.api.controllers;
 
+import com.oxeschool.api.dtos.matricula.AlunoMatriculadoResponse;
 import com.oxeschool.api.dtos.matricula.CursoMatriculadoResponse;
 import com.oxeschool.api.dtos.matricula.MatriculaResponse;
 import com.oxeschool.api.dtos.matricula.CriarMatriculaRequest;
@@ -40,6 +41,14 @@ public class MatriculaController {
     public ResponseEntity<List<CursoMatriculadoResponse>> listarCursosMatriculados(@PathVariable Long idAluno){
 
         return ResponseEntity.ok(matriculaService.listarCursosMatriculados(idAluno));
+    }
+
+    @GetMapping("/curso/{idCurso}")
+    public ResponseEntity<List<AlunoMatriculadoResponse>> listarAlunosMatriculados(
+            @PathVariable UUID idCurso,
+            @RequestParam Long idProfessor){
+
+        return ResponseEntity.ok(matriculaService.listarAlunosMatriculados(idCurso, idProfessor));
     }
 
 }
