@@ -122,6 +122,8 @@ public class MatriculaService {
                     );
                 })
                 .collect(Collectors.toList());
+    }
+
     // Issue #3 - lista os cursos em que o aluno está/esteve matriculado
     public List<CursoMatriculadoResponse> listarCursosMatriculados(Long idAluno) {
 
