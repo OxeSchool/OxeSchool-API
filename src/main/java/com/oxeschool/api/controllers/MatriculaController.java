@@ -5,6 +5,7 @@ import com.oxeschool.api.dtos.matricula.CursoMatriculadoResponse;
 import com.oxeschool.api.dtos.matricula.MatriculaResponse;
 import com.oxeschool.api.dtos.matricula.CriarMatriculaRequest;
 import com.oxeschool.api.services.MatriculaService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,7 +26,7 @@ public class MatriculaController {
 
     @PostMapping
     @PreAuthorize("hasRole('Aluno')")
-    public ResponseEntity<MatriculaResponse> criarMatricula(@RequestBody CriarMatriculaRequest criarMatriculaRequest){
+    public ResponseEntity<MatriculaResponse> criarMatricula(@Valid @RequestBody CriarMatriculaRequest criarMatriculaRequest){
 
         return ResponseEntity.status(HttpStatus.CREATED).body(matriculaService.criarMatricula(criarMatriculaRequest));
     }

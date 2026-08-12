@@ -19,7 +19,7 @@ public class LogoutController {
     }
 
     @PostMapping
-    public ResponseEntity<Void> logout(@Valid @RequestHeader("Authorization") String accesstoken, @RequestBody LogoutRequest refreshToken){
+    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String accesstoken, @Valid @RequestBody LogoutRequest refreshToken){
 
         logoutService.logout(new TokensRequest(accesstoken,refreshToken.getRefreshToken()));
 

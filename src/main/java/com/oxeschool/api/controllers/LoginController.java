@@ -3,6 +3,7 @@ package com.oxeschool.api.controllers;
 import com.oxeschool.api.dtos.usuario.request.LoginRequest;
 import com.oxeschool.api.dtos.usuario.response.AuthResponse;
 import com.oxeschool.api.services.LoginService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,13 +22,13 @@ public class LoginController {
     }
 
     @PostMapping("/aluno")
-    public ResponseEntity<AuthResponse> loginAluno(@RequestBody LoginRequest loginRequest){
+    public ResponseEntity<AuthResponse> loginAluno(@Valid @RequestBody LoginRequest loginRequest){
 
         return ResponseEntity.status(HttpStatus.OK).body(loginService.loginAluno(loginRequest));
     }
 
     @PostMapping("/professor")
-    public ResponseEntity<AuthResponse> loginProfessor(@RequestBody LoginRequest loginRequest){
+    public ResponseEntity<AuthResponse> loginProfessor(@Valid @RequestBody LoginRequest loginRequest){
 
         return ResponseEntity.status(HttpStatus.OK).body(loginService.loginProfessor(loginRequest));
     }

@@ -2,6 +2,7 @@ package com.oxeschool.api.controllers;
 
 import com.oxeschool.api.dtos.curso.*;
 import com.oxeschool.api.services.CursosService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -36,28 +37,28 @@ public class CursosController {
 
     @PostMapping
     @PreAuthorize("hasRole('Professor')")
-    public ResponseEntity<CursoResponse> criarCurso(@RequestBody CriarCursoRequest criarCursoRequest) {
+    public ResponseEntity<CursoResponse> criarCurso(@Valid @RequestBody CriarCursoRequest criarCursoRequest) {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.criar(criarCursoRequest));
     }
 
     @PutMapping("/{cursoId}")
     @PreAuthorize("hasRole('Professor')")
-    public ResponseEntity<CursoResponse> editarCurso(@RequestHeader("Authorization") String token, @PathVariable UUID cursoId, @RequestBody EditarCursoRequest editarCursoRequest) {
+    public ResponseEntity<CursoResponse> editarCurso(@RequestHeader("Authorization") String token, @PathVariable UUID cursoId, @Valid @RequestBody EditarCursoRequest editarCursoRequest) {
 
         return ResponseEntity.status(HttpStatus.OK).body(cursosService.editar(token, cursoId, editarCursoRequest));
     }
 
     @PostMapping("/{cursoId}/modulo")
     @PreAuthorize("hasRole('Professor')")
-    public ResponseEntity<CursoResponse> criarModulo(@PathVariable UUID cursoId, @RequestBody CriarModuloRequest criarModuloRequest) {
+    public ResponseEntity<CursoResponse> criarModulo(@PathVariable UUID cursoId, @Valid @RequestBody CriarModuloRequest criarModuloRequest) {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.adicionarModulo(cursoId, criarModuloRequest));
     }
 
     @PutMapping("/{cursoId}/modulo/{moduloId}")
     @PreAuthorize("hasRole('Professor')")
-    public ResponseEntity<CursoResponse> editarModulo(@RequestHeader("Authorization") String token, @PathVariable UUID cursoId, @PathVariable UUID moduloId, @RequestBody EditarModuloRequest editarModuloRequest) {
+    public ResponseEntity<CursoResponse> editarModulo(@RequestHeader("Authorization") String token, @PathVariable UUID cursoId, @PathVariable UUID moduloId, @Valid @RequestBody EditarModuloRequest editarModuloRequest) {
 
         return ResponseEntity.status(HttpStatus.OK).body(cursosService.editarModulo(token, cursoId, moduloId, editarModuloRequest));
     }
@@ -71,14 +72,14 @@ public class CursosController {
 
     @PostMapping("/{cursoId}/modulo/{moduloId}/aula")
     @PreAuthorize("hasRole('Professor')")
-    public ResponseEntity<CursoResponse> criarAula(@PathVariable UUID cursoId, @PathVariable UUID moduloId, @RequestBody CriarAulaRequest criarAulaRequest){
+    public ResponseEntity<CursoResponse> criarAula(@PathVariable UUID cursoId, @PathVariable UUID moduloId, @Valid @RequestBody CriarAulaRequest criarAulaRequest){
 
         return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.adicionarAula(cursoId, moduloId, criarAulaRequest));
     }
 
     @PutMapping("/{cursoId}/modulo/{moduloId}/aula/{aulaId}")
     @PreAuthorize("hasRole('Professor')")
-    public ResponseEntity<CursoResponse> editarAula(@RequestHeader("Authorization") String token, @PathVariable UUID cursoId, @PathVariable UUID moduloId, @PathVariable UUID aulaId, @RequestBody EditarAulaRequest editarAulaRequest){
+    public ResponseEntity<CursoResponse> editarAula(@RequestHeader("Authorization") String token, @PathVariable UUID cursoId, @PathVariable UUID moduloId, @PathVariable UUID aulaId, @Valid @RequestBody EditarAulaRequest editarAulaRequest){
 
         return ResponseEntity.status(HttpStatus.OK).body(cursosService.editarAula(token, cursoId, moduloId, aulaId, editarAulaRequest));
     }
@@ -92,7 +93,7 @@ public class CursosController {
 
     @PutMapping("/{cursoId}/status")
     @PreAuthorize("hasRole('Professor')")
-    public ResponseEntity<CursoResponse> editarStatusCurso(@RequestHeader("Authorization") String token, @PathVariable UUID cursoId, @RequestBody EditarStatusCursoRequest editarStatusCursoRequest){
+    public ResponseEntity<CursoResponse> editarStatusCurso(@RequestHeader("Authorization") String token, @PathVariable UUID cursoId, @Valid @RequestBody EditarStatusCursoRequest editarStatusCursoRequest){
 
         return ResponseEntity.status(HttpStatus.OK).body(cursosService.editarStatus(token, cursoId, editarStatusCursoRequest));
     }
