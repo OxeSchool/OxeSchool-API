@@ -60,4 +60,12 @@ public class CursosController {
         return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.adicionarAula(cursoId, moduloId, criarAulaRequest));
     }
 
+    @PutMapping("/{cursoId}/modulo/{moduloId}/aula/{aulaId}")
+    @PreAuthorize("hasRole('Professor')")
+    public ResponseEntity<CursoResponse> editarAula(@PathVariable UUID cursoId, @PathVariable UUID moduloId, @PathVariable UUID aulaId, @RequestBody EditarAulaRequest editarAulaRequest){
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.editarAula(cursoId, moduloId, aulaId, editarAulaRequest));
+    }
+
+
 }

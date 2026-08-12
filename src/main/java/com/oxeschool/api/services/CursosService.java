@@ -181,4 +181,45 @@ public class CursosService {
 
     }
 
+    public CursoResponse editarAula(UUID cursoId, UUID moduloId, UUID aulaId, EditarAulaRequest editarAulaRequest){
+
+        var curso = cursosRepository.findById(cursoId)
+                .orElseThrow(CursoNaoEncontradoException::new);
+
+        var modulo = curso.getModulos()
+                .stream()
+                .filter(m -> m.getId().equals(moduloId))
+                .findFirst()
+                .orElseThrow(ModuloNaoEncontradoException::new);
+
+        var moduloIndex = curso.getModulos().indexOf(modulo);
+
+        var aula = modulo.getAulas()
+                .stream()
+                .filter(a -> a.getId().equals(aulaId))
+                .findFirst()
+                .orElseThrow(AulaNaoEncontrada::new);
+
+        var aulaIndex = modulo.getAulas().indexOf(aula);
+
+        aula.setTitulo(editarAulaRequest.getTitulo());
+        aula.setTexto(editarAulaRequest.getTexto());
+        aula.setVideoUrl(editarAulaRequest.getVideoUrl());
+
+        var aulas = modulo.getAulas();
+
+        aulas.set(aulaIndex, aula);
+
+        var modulos = curso.getModulos();
+
+        modulos.set(moduloIndex, modulo);
+
+        curso.setModulos(modulos);
+
+        var cursoSalvo = cursosRepository.save(curso);
+
+        return cursoMapper.toCursoResponse(cursoMapper.toCursoDomain(cursoSalvo));
+
+    }
+
 }
