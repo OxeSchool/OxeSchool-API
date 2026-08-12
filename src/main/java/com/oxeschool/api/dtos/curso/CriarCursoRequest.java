@@ -10,6 +10,9 @@ import lombok.Setter;
 public class CriarCursoRequest {
 
     private String nome;
+    private String descricao;
     private Long idProfessor;
+    private String categoria;
+    private Long cargaHoraria;
 
 }

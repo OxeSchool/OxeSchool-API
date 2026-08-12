@@ -1,6 +1,7 @@
 package com.oxeschool.api.domain;
 
 import com.oxeschool.api.entity.Curso.Modulo;
+import com.oxeschool.api.enums.StatusCurso;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,8 +15,12 @@ import java.util.UUID;
 public class CursoDomain {
 
     private UUID id;
-    private String nome;
     private Long idProfessor;
+    private String nome;
+    private String descricao;
+    private String categoria;
+    private Long cargaHoraria;
     private List<Modulo> modulos;
+    private StatusCurso status;
 
 }

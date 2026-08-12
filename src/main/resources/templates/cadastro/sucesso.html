@@ -1,22 +1,22 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Cadastro realizado')}"></head>
-<body class="bg-light">
-<nav th:replace="~{fragments/layout :: navbar}"></nav>
-
-<div class="container" style="max-width: 480px;">
-    <div class="card shadow-sm">
-        <div class="card-body p-4 text-center">
-            <div class="text-success mb-3" style="font-size: 3rem;">&#10003;</div>
-            <h1 class="h4 mb-3">Cadastro realizado com sucesso!</h1>
-            <p class="mb-1"><strong>Nome:</strong> <span th:text="${nome}"></span></p>
-            <p class="mb-1"><strong>Email:</strong> <span th:text="${email}"></span></p>
-            <p class="mb-4"><strong>Tipo:</strong> <span th:text="${tipo}"></span></p>
-            <a href="/cadastro" class="btn btn-outline-primary">Cadastrar outro usuário</a>
+<html th:replace="~{fragments/layout :: page(titulo='Cadastro realizado', conteudo=~{::section}, ativo='cadastro')}"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<section>
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-8 col-md-6 col-lg-5">
+            <div class="ox-card text-center">
+                <div class="ox-card-body">
+                    <div class="text-success mb-3" style="font-size: 3rem;">&#10003;</div>
+                    <h1 class="h4 mb-3">Cadastro realizado com sucesso!</h1>
+                    <p class="mb-1"><strong>Nome:</strong> <span th:text="${nome}"></span></p>
+                    <p class="mb-1"><strong>Email:</strong> <span th:text="${email}"></span></p>
+                    <p class="mb-4"><strong>Tipo:</strong> <span th:text="${tipo}"></span></p>
+                    <a href="/login" class="btn btn-ox-primary rounded-pill">Entrar</a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-
-<script th:replace="~{fragments/layout :: scripts}"></script>
+</section>
 </body>
 </html>

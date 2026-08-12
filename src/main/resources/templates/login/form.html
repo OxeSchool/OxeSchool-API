@@ -1,74 +1,83 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('Login')}"></head>
-<body class="bg-light">
-<nav th:replace="~{fragments/layout :: navbar}"></nav>
+<html th:replace="~{fragments/layout :: page(titulo='Login', conteudo=~{::section}, ativo='login')}"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<section>
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-8 col-md-6 col-lg-4">
+            <div class="ox-card">
+                <div class="ox-card-body">
+                    <h1 class="h4 mb-4 text-center">Entrar</h1>
 
-<div class="container" style="max-width: 420px;">
-    <div class="card shadow-sm">
-        <div class="card-body p-4">
-            <h1 class="h4 mb-4 text-center">Entrar</h1>
+                    <div id="loginAlert" class="alert alert-danger d-none" role="alert"></div>
 
-            <div id="loginAlert" class="alert alert-danger d-none" role="alert"></div>
-            <div id="loginSucesso" class="alert alert-success d-none" role="alert">Login realizado com sucesso!</div>
+                    <form id="loginForm" novalidate>
+                        <div class="mb-3">
+                            <label class="form-label d-block">Eu sou</label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="tipo" value="aluno" id="tipoAluno" checked>
+                                <label class="btn btn-ox-outline" for="tipoAluno">Aluno</label>
 
-            <form id="loginForm" novalidate>
-                <div class="mb-3">
-                    <label for="email" class="form-label">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
+                                <input type="radio" class="btn-check" name="tipo" value="professor" id="tipoProfessor">
+                                <label class="btn btn-ox-outline" for="tipoProfessor">Professor</label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="senha" class="form-label">Senha</label>
+                            <input type="password" class="form-control" id="senha" name="senha" required>
+                        </div>
+
+                        <button type="submit" class="btn btn-ox-primary rounded-pill w-100">Entrar</button>
+                    </form>
+
+                    <p class="text-center mt-3 mb-0">
+                        <small>Não tem conta? <a href="/cadastro">Cadastre-se</a></small>
+                    </p>
                 </div>
-
-                <div class="mb-4">
-                    <label for="senha" class="form-label">Senha</label>
-                    <input type="password" class="form-control" id="senha" name="senha" required>
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100">Entrar</button>
-            </form>
-
-            <p class="text-center mt-3 mb-0">
-                <small>Não tem conta? <a href="/cadastro">Cadastre-se</a></small>
-            </p>
+            </div>
         </div>
     </div>
-</div>
 
-<script th:replace="~{fragments/layout :: scripts}"></script>
-<script th:inline="javascript">
-    document.getElementById('loginForm').addEventListener('submit', async function (event) {
-        event.preventDefault();
+    <script th:inline="javascript">
+        document.getElementById('loginForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
 
-        var alertBox = document.getElementById('loginAlert');
-        var sucessoBox = document.getElementById('loginSucesso');
-        alertBox.classList.add('d-none');
-        sucessoBox.classList.add('d-none');
+            var alertBox = document.getElementById('loginAlert');
+            alertBox.classList.add('d-none');
 
-        var email = document.getElementById('email').value;
-        var senha = document.getElementById('senha').value;
+            var tipo = document.querySelector('input[name="tipo"]:checked').value;
+            var email = document.getElementById('email').value;
+            var senha = document.getElementById('senha').value;
 
-        try {
-            var response = await fetch('/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: email, senha: senha })
-            });
+            try {
+                var response = await fetch('/login/' + tipo, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: email, senha: senha })
+                });
 
-            if (!response.ok) {
-                var mensagem = (response.status === 404 || response.status === 405)
-                    ? 'Login ainda não disponível — o backend de autenticação ainda não foi implementado.'
-                    : 'Email ou senha inválidos.';
-                throw new Error(mensagem);
+                if (!response.ok) {
+                    throw new Error('Email ou senha inválidos.');
+                }
+
+                var dados = await response.json();
+                localStorage.setItem('oxeschool_token', dados.tokens.accessToken);
+                localStorage.setItem('oxeschool_refresh_token', dados.tokens.refreshToken);
+                localStorage.setItem('oxeschool_usuario', JSON.stringify(dados.usuario));
+
+                window.location.href = '/cursos';
+            } catch (erro) {
+                alertBox.textContent = erro.message;
+                alertBox.classList.remove('d-none');
             }
-
-            var dados = await response.json();
-            localStorage.setItem('oxeschool_token', dados.token);
-
-            sucessoBox.classList.remove('d-none');
-        } catch (erro) {
-            alertBox.textContent = erro.message;
-            alertBox.classList.remove('d-none');
-        }
-    });
-</script>
+        });
+    </script>
+</section>
 </body>
 </html>
