@@ -67,6 +67,13 @@ public class CursosController {
         return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.editarAula(cursoId, moduloId, aulaId, editarAulaRequest));
     }
 
+    @DeleteMapping("/{cursoId}/modulo/{moduloId}/aula/{aulaId}")
+    @PreAuthorize("hasRole('Professor')")
+    public ResponseEntity<CursoResponse> excluirAula(@PathVariable UUID cursoId, @PathVariable UUID moduloId, @PathVariable UUID aulaId){
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.excluirAula(cursoId, moduloId, aulaId));
+    }
+
     @PutMapping("/{cursoId}/status")
     @PreAuthorize("hasRole('Professor')")
     public ResponseEntity<CursoResponse> editarStatusCurso(@PathVariable UUID cursoId, @RequestBody EditarStatusCursoRequest editarStatusCursoRequest){

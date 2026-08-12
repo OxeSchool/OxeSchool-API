@@ -234,4 +234,43 @@ public class CursosService {
 
     }
 
+    public CursoResponse excluirAula(UUID cursoId, UUID moduloId, UUID aulaId){
+
+        var curso = cursosRepository.findById(cursoId)
+                .orElseThrow(CursoNaoEncontradoException::new);
+
+        var modulo = curso.getModulos()
+                .stream()
+                .filter(m -> m.getId().equals(moduloId))
+                .findFirst()
+                .orElseThrow(ModuloNaoEncontradoException::new);
+
+        var moduloIndex = curso.getModulos().indexOf(modulo);
+
+        var aula = modulo.getAulas()
+                .stream()
+                .filter(a -> a.getId().equals(aulaId))
+                .findFirst()
+                .orElseThrow(AulaNaoEncontrada::new);
+
+        var aulaIndex = modulo.getAulas().indexOf(aula);
+
+        var aulas = modulo.getAulas();
+
+        aulas.remove(aulaIndex);
+
+        modulo.setAulas(aulas);
+
+        var modulos = curso.getModulos();
+
+        modulos.set(moduloIndex, modulo);
+
+        curso.setModulos(modulos);
+
+        var cursoSalvo = cursosRepository.save(curso);
+
+        return cursoMapper.toCursoResponse(cursoMapper.toCursoDomain(cursoSalvo));
+
+    }
+
 }
