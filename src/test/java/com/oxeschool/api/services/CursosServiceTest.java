@@ -8,6 +8,7 @@ import com.oxeschool.api.dtos.curso.CursoResponse;
 import com.oxeschool.api.entity.Curso.Aula;
 import com.oxeschool.api.entity.Curso.CursoEntity;
 import com.oxeschool.api.entity.Curso.Modulo;
+import com.oxeschool.api.enums.StatusCurso;
 import com.oxeschool.api.exceptions.customs.curso.AulaJaExisteException;
 import com.oxeschool.api.exceptions.customs.curso.CursoJaExisteException;
 import com.oxeschool.api.exceptions.customs.curso.CursoNaoEncontradoException;
@@ -48,12 +49,22 @@ class CursosServiceTest {
     @Test
     void criar_comDadosValidos_deveSalvarComModulosVazioERetornarResponse() {
         var cursoId = UUID.randomUUID();
-        var request = new CriarCursoRequest("Java", 1L);
+        var request = new CriarCursoRequest("Java", "Curso de java", 1L, "tecnologia", 60L);
 
         var cursoSalvo = CursoEntity.builder()
-                .id(cursoId).nome("Java").idProfessor(1L).modulos(new ArrayList<>()).build();
-        var domain = new CursoDomain(cursoId, "Java", 1L, new ArrayList<>());
-        var response = new CursoResponse(cursoId, "Java", 1L, new ArrayList<>());
+                .id(cursoId)
+                .nome("Java")
+                .descricao("Curso de java")
+                .categoria("tecnologia")
+                .cargaHoraria(60L)
+                .idProfessor(1L)
+                .modulos(new ArrayList<>())
+                .status(StatusCurso.ATIVO)
+                .build();
+
+
+        var domain = new CursoDomain(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L, new ArrayList<>(), StatusCurso.ATIVO);
+        var response = new CursoResponse(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L, new ArrayList<>(), StatusCurso.ATIVO);
 
         when(cursosRepository.existsByNomeAndIdProfessor("Java", 1L)).thenReturn(false);
         when(cursosRepository.save(any(CursoEntity.class))).thenReturn(cursoSalvo);
@@ -70,7 +81,7 @@ class CursosServiceTest {
 
     @Test
     void criar_comNomeRepetidoParaMesmoProfessor_deveLancarCursoJaExisteException() {
-        var request = new CriarCursoRequest("Java", 1L);
+        var request = new CriarCursoRequest("Java", "Curso de java", 1L, "tecnologia", 60L);
 
         when(cursosRepository.existsByNomeAndIdProfessor("Java", 1L)).thenReturn(true);
 
@@ -83,9 +94,18 @@ class CursosServiceTest {
     void pegarCursoPorId_comCursoExistente_deveRetornarResponse() {
         var cursoId = UUID.randomUUID();
         var curso = CursoEntity.builder()
-                .id(cursoId).nome("Java").idProfessor(1L).modulos(new ArrayList<>()).build();
-        var domain = new CursoDomain(cursoId, "Java", 1L, new ArrayList<>());
-        var response = new CursoResponse(cursoId, "Java", 1L, new ArrayList<>());
+                .id(cursoId)
+                .nome("Java")
+                .descricao("Curso de java")
+                .categoria("tecnologia")
+                .cargaHoraria(60L)
+                .idProfessor(1L)
+                .modulos(new ArrayList<>())
+                .status(StatusCurso.ATIVO)
+                .build();
+
+        var domain = new CursoDomain(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L, new ArrayList<>(), StatusCurso.ATIVO);
+        var response = new CursoResponse(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L, new ArrayList<>(), StatusCurso.ATIVO);
 
         when(cursosRepository.findById(cursoId)).thenReturn(Optional.of(curso));
         when(cursoMapper.toCursoDomain(curso)).thenReturn(domain);
@@ -111,13 +131,28 @@ class CursosServiceTest {
         var request = new CriarModuloRequest("Modulo 1");
 
         var curso = CursoEntity.builder()
-                .id(cursoId).nome("Java").idProfessor(1L).modulos(new ArrayList<>()).build();
-        var cursoComModulo = CursoEntity.builder()
-                .id(cursoId).nome("Java").idProfessor(1L)
+                .id(cursoId)
+                .nome("Java")
+                .descricao("Curso de java")
+                .categoria("tecnologia")
+                .cargaHoraria(60L)
+                .idProfessor(1L)
+                .status(StatusCurso.ATIVO)
+                .modulos(new ArrayList<>())
+                .build();
+
+        var cursoComModulo = CursoEntity.builder().id(cursoId)
+                .nome("Java")
+                .descricao("Curso de java")
+                .categoria("tecnologia")
+                .cargaHoraria(60L)
+                .idProfessor(1L)
+                .status(StatusCurso.ATIVO)
                 .modulos(new ArrayList<>(List.of(Modulo.builder().nome("Modulo 1").aulas(new ArrayList<>()).build())))
                 .build();
-        var domain = new CursoDomain(cursoId, "Java", 1L, cursoComModulo.getModulos());
-        var response = new CursoResponse(cursoId, "Java", 1L, cursoComModulo.getModulos());
+
+        var domain = new CursoDomain(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L, cursoComModulo.getModulos(), StatusCurso.ATIVO);
+        var response = new CursoResponse(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L, cursoComModulo.getModulos(), StatusCurso.ATIVO);
 
         when(cursosRepository.findById(cursoId)).thenReturn(Optional.of(curso));
         when(cursosRepository.save(any(CursoEntity.class))).thenReturn(cursoComModulo);
@@ -178,8 +213,10 @@ class CursosServiceTest {
         var cursoComAula = CursoEntity.builder()
                 .id(cursoId).nome("Java").idProfessor(1L)
                 .modulos(new ArrayList<>(List.of(moduloComAula))).build();
-        var domain = new CursoDomain(cursoId, "Java", 1L, cursoComAula.getModulos());
-        var response = new CursoResponse(cursoId, "Java", 1L, cursoComAula.getModulos());
+
+        var domain = new CursoDomain(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L, cursoComAula.getModulos(), StatusCurso.ATIVO);
+        var response = new CursoResponse(cursoId, 1L, "Java", "Curso de java", "tecnologia", 60L,cursoComAula.getModulos(), StatusCurso.ATIVO);
+
 
         when(cursosRepository.findById(cursoId)).thenReturn(Optional.of(curso));
         when(cursosRepository.save(any(CursoEntity.class))).thenReturn(cursoComAula);

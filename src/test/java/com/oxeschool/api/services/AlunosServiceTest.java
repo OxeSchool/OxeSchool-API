@@ -49,7 +49,12 @@ class AlunosServiceTest {
                 .id(1L).nome("Ana").email("ana@email.com").senha("hashSenha").build();
         var domain = new AlunoDomain();
         domain.setId(1L); domain.setNome("Ana"); domain.setEmail("ana@email.com"); domain.setSenha("hashSenha");
-        var response = new AlunoResponse(1L, "Ana", "ana@email.com", List.of());
+
+        var response = new AlunoResponse();
+
+        response.setId(1L);
+        response.setEmail("ana@email.com");
+        response.setNome("Ana");
 
         when(usuariosRepository.existsByEmail("ana@email.com")).thenReturn(false);
         when(passwordEncoder.encode("senha123")).thenReturn("hashSenha");
