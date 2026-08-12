@@ -69,6 +69,10 @@ Header expected:
 
 ``Authorization: Bearer <Access Token>``
 
+Behavior expected:
+
+`Only returns cursos with an ATIVO matricula and an ATIVO status.`
+
 Response body expected:
 
    ```
@@ -88,5 +92,42 @@ Response body expected:
 * `400 - BAD REQUEST` - Invalid parameters(null parameters, size invalid).
 * `401 - UNAUTHORIZED` - token invalid, expired or in blacklist.
 * `404 - NOT FOUND` - Curso not found (for one of the enrolled cursos).
+
+--- 
+
+### GET `/curso/{idCurso}`
+
+### Only with Professor Role
+
+Pagination url (optional)
+
+```/matricula/curso/{idCurso}?idProfessor=1```
+
+``idProfessor`` - id of the professor making the request (required)
+
+Behavior expected:
+
+`Only returns alunos with an ATIVO matricula. Progresso is calculated as (aulasConcluidas / total de aulas do curso) * 100.`
+
+Response body expected:
+
+   ```
+   [
+       {
+            "idAluno": Long
+            "nome": String
+            "email": String
+            "status": String //ATIVO or INATIVO
+            "progresso": Double
+       }
+   ]
+   ```
+
+#### Returns
+
+* `200 - OK` - Sucess.
+* `400 - BAD REQUEST` - Invalid parameters(null parameters, size invalid).
+* `403 - FORBIDDEN` - Curso does not belong to this professor.
+* `404 - NOT FOUND` - Curso not found.
 
 --- 
