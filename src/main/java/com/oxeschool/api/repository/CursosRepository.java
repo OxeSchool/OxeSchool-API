@@ -4,7 +4,6 @@ import com.oxeschool.api.entity.Curso.CursoEntity;
 import com.oxeschool.api.enums.StatusCurso;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
