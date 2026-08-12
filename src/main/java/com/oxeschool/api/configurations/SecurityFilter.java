@@ -158,7 +158,7 @@ public class SecurityFilter extends OncePerRequestFilter {
 
         String path = request.getServletPath();
 
-        return path.equals("/refresh");
+        return path.startsWith("/refresh");
     }
 
 }

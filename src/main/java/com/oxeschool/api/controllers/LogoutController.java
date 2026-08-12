@@ -2,6 +2,7 @@ package com.oxeschool.api.controllers;
 
 import com.oxeschool.api.dtos.tokens.TokensRequest;
 import com.oxeschool.api.dtos.usuario.request.LogoutRequest;
+import com.oxeschool.api.jwt.JwtService;
 import com.oxeschool.api.services.LogoutService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +14,7 @@ public class LogoutController {
 
     final private LogoutService logoutService;
 
-    public  LogoutController(LogoutService logoutService){
+    public LogoutController(LogoutService logoutService) {
         this.logoutService = logoutService;
     }
 

@@ -18,7 +18,7 @@ public class LogoutService {
 
     public void logout(TokensRequest tokensRequest){
 
-        redisBlackListService.adicionarAccessToken(jwtService.pegarTokenId(tokensRequest.getAccessToken()), tokensRequest.getAccessToken());
+        redisBlackListService.adicionarAccessToken(jwtService.pegarTokenId(jwtService.pegarToken(tokensRequest.getAccessToken())), tokensRequest.getAccessToken());
         redisBlackListService.adicionarRefreshToken(jwtService.pegarTokenId(tokensRequest.getRefreshToken()), tokensRequest.getRefreshToken());
 
     }
