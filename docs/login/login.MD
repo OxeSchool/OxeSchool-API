@@ -1,6 +1,6 @@
-# Registros Routes
+# Login Routes
 
-## All routes starts with `/registrar`
+## All routes starts with `/login`
 
 --- 
 
@@ -10,7 +10,6 @@ Request body expected:
 
    ```
    {
-    "nome": String
     "email": String
     "senha": String
     }
@@ -34,9 +33,9 @@ Response body expected:
 
 #### Returns
 
-* `201 - CREATED` - Sucess.
-* `400 - BAD REQUEST` - Invalid parameters(nome/email/senha null or blank, email invalid, senha with less than 8 characters).
-* `409 - CONFLICT` - Aluno already exists (email already registered).
+* `200 - OK` - Sucess.
+* `400 - BAD REQUEST` - Invalid parameters(null parameters, size invalid).
+* `404 - NOT FOUND` - Aluno not found | invalid password.
 
 --- 
 
@@ -46,7 +45,6 @@ Request body expected:
 
    ```
    {
-    "nome": String
     "email": String
     "senha": String
     }
@@ -70,8 +68,8 @@ Response body expected:
 
 #### Returns
 
-* `201 - CREATED` - Sucess.
-* `400 - BAD REQUEST` - Invalid parameters(nome/email/senha null or blank, email invalid, senha with less than 8 characters).
-* `409 - CONFLICT` - Professor already exists (email already registered).
+* `200 - OK` - Sucess.
+* `400 - BAD REQUEST` - Invalid parameters(null parameters, size invalid).
+* `404 - NOT FOUND` - Professor not found | invalid password.
 
 --- 

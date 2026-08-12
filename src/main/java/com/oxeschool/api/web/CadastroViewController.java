@@ -2,6 +2,7 @@ package com.oxeschool.api.web;
 
 import com.oxeschool.api.dtos.usuario.request.RegistrarAlunoRequest;
 import com.oxeschool.api.dtos.usuario.request.RegistrarProfessorRequest;
+import com.oxeschool.api.dtos.usuario.response.AuthResponse;
 import com.oxeschool.api.dtos.usuario.response.UsuarioResponse;
 import com.oxeschool.api.exceptions.customs.aluno.AlunoJaExisteException;
 import com.oxeschool.api.exceptions.customs.professor.ProfessorJaExisteException;
@@ -44,12 +45,12 @@ public class CadastroViewController {
         }
 
         try {
-            UsuarioResponse response = form.getTipo() == CadastroForm.Tipo.PROFESSOR
+            AuthResponse response = form.getTipo() == CadastroForm.Tipo.PROFESSOR
                     ? professoresService.registrar(paraRegistrarProfessorRequest(form))
                     : alunosService.registrar(paraRegistrarAlunoRequest(form));
 
-            model.addAttribute("nome", response.getNome());
-            model.addAttribute("email", response.getEmail());
+            model.addAttribute("nome", response.getUsuario().getNome());
+            model.addAttribute("email", response.getUsuario().getEmail());
             model.addAttribute("tipo", form.getTipo());
             return "cadastro/sucesso";
         } catch (AlunoJaExisteException | ProfessorJaExisteException exception) {

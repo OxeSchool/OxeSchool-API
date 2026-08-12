@@ -1,5 +1,6 @@
 package com.oxeschool.api.controllers;
 
+import com.oxeschool.api.dtos.usuario.response.AuthResponse;
 import com.oxeschool.api.dtos.usuario.response.ProfessorResponse;
 import com.oxeschool.api.dtos.usuario.request.RegistrarProfessorRequest;
 import com.oxeschool.api.services.AlunosService;
@@ -29,13 +30,13 @@ public class RegistrosController {
     }
 
     @PostMapping("/aluno")
-    public ResponseEntity<AlunoResponse> registrarAluno(@Valid @RequestBody RegistrarAlunoRequest registrarAlunoRequest){
+    public ResponseEntity<AuthResponse> registrarAluno(@Valid @RequestBody RegistrarAlunoRequest registrarAlunoRequest){
 
         return ResponseEntity.status(HttpStatus.CREATED).body(alunosService.registrar(registrarAlunoRequest));
     }
 
     @PostMapping("/professor")
-    public ResponseEntity<ProfessorResponse> registrarProfessor(@Valid @RequestBody RegistrarProfessorRequest registrarProfessorRequest){
+    public ResponseEntity<AuthResponse> registrarProfessor(@Valid @RequestBody RegistrarProfessorRequest registrarProfessorRequest){
 
         return ResponseEntity.status(HttpStatus.CREATED).body(professoresService.registrar(registrarProfessorRequest));
     }

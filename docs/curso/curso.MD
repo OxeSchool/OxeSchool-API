@@ -40,6 +40,12 @@ Response body expected:
 
 ### POST `/`
 
+### Only with Professor Role
+
+Header expected:
+
+``Authorization: Bearer <Access Token>``
+
 Request body expected:
 
    ```
@@ -64,11 +70,18 @@ Response body expected:
 
 * `201 - CREATED` - Sucess.
 * `400 - BAD REQUEST` - Invalid parameters(null parameters, size invalid).
+* `401 - UNAUTHORIZED` - token invalid, expired or in blacklist.
 * `409 - CONFLICT` - This professor already has a curso with this nome.
 
 --- 
 
 ### POST `/{cursoId}/modulo`
+
+### Only with Professor Role
+
+Header expected:
+
+``Authorization: Bearer <Access Token>``
 
 Request body expected:
 
@@ -99,12 +112,19 @@ Response body expected:
 
 * `201 - CREATED` - Sucess.
 * `400 - BAD REQUEST` - Invalid parameters(null parameters, size invalid).
+* `401 - UNAUTHORIZED` - token invalid, expired or in blacklist.
 * `404 - NOT FOUND` - Curso not found.
 * `409 - CONFLICT` - This curso already has a modulo with this nome.
 
 --- 
 
 ### POST `/{cursoId}/modulo/{moduloId}/aula`
+
+### Only with Professor Role
+
+Header expected:
+
+``Authorization: Bearer <Access Token>``
 
 Request body expected:
 
@@ -144,6 +164,7 @@ Response body expected:
 
 * `201 - CREATED` - Sucess.
 * `400 - BAD REQUEST` - Invalid parameters(null parameters, size invalid).
+* `401 - UNAUTHORIZED` - token invalid, expired or in blacklist.
 * `404 - NOT FOUND` - Curso not found | Modulo not found.
 * `409 - CONFLICT` - This modulo already has an aula with the same titulo, texto and videoUrl.
 
