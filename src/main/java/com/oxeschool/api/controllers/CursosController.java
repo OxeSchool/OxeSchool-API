@@ -67,5 +67,11 @@ public class CursosController {
         return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.editarAula(cursoId, moduloId, aulaId, editarAulaRequest));
     }
 
+    @PutMapping("/{cursoId}/status")
+    @PreAuthorize("hasRole('Professor')")
+    public ResponseEntity<CursoResponse> editarStatusCurso(@PathVariable UUID cursoId, @RequestBody EditarStatusCursoRequest editarStatusCursoRequest){
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.editarStatus(cursoId, editarStatusCursoRequest));
+    }
 
 }

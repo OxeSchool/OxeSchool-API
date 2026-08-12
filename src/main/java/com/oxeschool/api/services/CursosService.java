@@ -67,6 +67,18 @@ public class CursosService {
         return cursoMapper.toCursoResponse(cursoMapper.toCursoDomain(cursoSalvo));
     }
 
+    public CursoResponse editarStatus(UUID cursoid, EditarStatusCursoRequest editarStatusCursoRequest) {
+
+        var curso = cursosRepository.findById(cursoid)
+                .orElseThrow(CursoNaoEncontradoException::new);
+
+        curso.setStatus(editarStatusCursoRequest.getStatus());
+
+        var cursoSalvo = cursosRepository.save(curso);
+
+        return cursoMapper.toCursoResponse(cursoMapper.toCursoDomain(cursoSalvo));
+    }
+
     public CursoResponse pegarCursoPorId(UUID id){
 
         var curso = cursosRepository.findById(id)
