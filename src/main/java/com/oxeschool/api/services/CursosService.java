@@ -7,6 +7,7 @@ import com.oxeschool.api.dtos.curso.CursoResponse;
 import com.oxeschool.api.entity.Curso.Aula;
 import com.oxeschool.api.entity.Curso.CursoEntity;
 import com.oxeschool.api.entity.Curso.Modulo;
+import com.oxeschool.api.enums.StatusCurso;
 import com.oxeschool.api.exceptions.customs.curso.*;
 import com.oxeschool.api.mappers.CursoMapper;
 import com.oxeschool.api.repository.CursosRepository;
@@ -41,8 +42,12 @@ public class CursosService {
         var novoCurso = CursoEntity.builder()
                 .id(UUID.randomUUID())
                 .nome(criarCursoRequest.getNome())
+                .descricao(criarCursoRequest.getDescricao())
                 .idProfessor(criarCursoRequest.getIdProfessor())
+                .categoria(criarCursoRequest.getCategoria())
+                .cargaHoraria(criarCursoRequest.getCargaHoraria())
                 .modulos(new ArrayList<>())
+                .status(StatusCurso.ATIVO)
                 .build();
 
         var cursoSalvo = cursosRepository.save(novoCurso);

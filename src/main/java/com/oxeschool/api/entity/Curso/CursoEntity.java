@@ -1,5 +1,6 @@
 package com.oxeschool.api.entity.Curso;
 
+import com.oxeschool.api.enums.StatusCurso;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -17,9 +18,13 @@ public class CursoEntity {
 
     @Id
     private UUID id;
-    private String nome;
     private Long idProfessor;
+    private String nome;
+    private String descricao;
+    private String categoria;
+    private Long cargaHoraria;
     private List<Modulo> modulos;
+    private StatusCurso status;
 
 }
 
