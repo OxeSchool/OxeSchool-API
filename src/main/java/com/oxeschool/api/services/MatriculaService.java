@@ -130,7 +130,7 @@ public class MatriculaService {
 
         return matriculas.stream()
                 .map(matricula -> {
-                    var curso = cursosRepository.findById(matricula.getIdCurso())
+                    var curso = cursosRepository.findByIdAndStatus(matricula.getIdCurso(), StatusCurso.ATIVO)
                             .orElseThrow(CursoNaoEncontradoException::new);
 
                     return new CursoMatriculadoResponse(
