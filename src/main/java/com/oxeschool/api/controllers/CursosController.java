@@ -1,9 +1,6 @@
 package com.oxeschool.api.controllers;
 
-import com.oxeschool.api.dtos.curso.CriarAulaRequest;
-import com.oxeschool.api.dtos.curso.CriarCursoRequest;
-import com.oxeschool.api.dtos.curso.CriarModuloRequest;
-import com.oxeschool.api.dtos.curso.CursoResponse;
+import com.oxeschool.api.dtos.curso.*;
 import com.oxeschool.api.services.CursosService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,9 +32,16 @@ public class CursosController {
         return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.criar(criarCursoRequest));
     }
 
+    @PutMapping("/{cursoId}")
+    @PreAuthorize("hasRole('Professor')")
+    public ResponseEntity<CursoResponse> editarCurso(@PathVariable UUID cursoId, @RequestBody EditarCursoRequest editarCursoRequest) {
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.editar(cursoId, editarCursoRequest));
+    }
+
     @PostMapping("/{cursoId}/modulo")
     @PreAuthorize("hasRole('Professor')")
-    public ResponseEntity<CursoResponse> criarModulo(@PathVariable UUID cursoId, @RequestBody CriarModuloRequest criarModuloRequest){
+    public ResponseEntity<CursoResponse> criarModulo(@PathVariable UUID cursoId, @RequestBody CriarModuloRequest criarModuloRequest) {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.adicionarModulo(cursoId, criarModuloRequest));
     }

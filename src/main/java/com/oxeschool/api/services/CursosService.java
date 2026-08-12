@@ -1,9 +1,6 @@
 package com.oxeschool.api.services;
 
-import com.oxeschool.api.dtos.curso.CriarAulaRequest;
-import com.oxeschool.api.dtos.curso.CriarCursoRequest;
-import com.oxeschool.api.dtos.curso.CriarModuloRequest;
-import com.oxeschool.api.dtos.curso.CursoResponse;
+import com.oxeschool.api.dtos.curso.*;
 import com.oxeschool.api.entity.Curso.Aula;
 import com.oxeschool.api.entity.Curso.CursoEntity;
 import com.oxeschool.api.entity.Curso.Modulo;
@@ -51,6 +48,21 @@ public class CursosService {
                 .build();
 
         var cursoSalvo = cursosRepository.save(novoCurso);
+
+        return cursoMapper.toCursoResponse(cursoMapper.toCursoDomain(cursoSalvo));
+    }
+
+    public CursoResponse editar(UUID cursoid, EditarCursoRequest editarCursoRequest) {
+
+        var curso = cursosRepository.findById(cursoid)
+                .orElseThrow(CursoNaoEncontradoException::new);
+
+        curso.setNome(editarCursoRequest.getNome());
+        curso.setDescricao(editarCursoRequest.getDescricao());
+        curso.setCategoria(editarCursoRequest.getCategoria());
+        curso.setCargaHoraria(editarCursoRequest.getCargaHoraria());
+
+        var cursoSalvo = cursosRepository.save(curso);
 
         return cursoMapper.toCursoResponse(cursoMapper.toCursoDomain(cursoSalvo));
     }
