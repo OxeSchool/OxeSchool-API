@@ -1,10 +1,10 @@
 package com.oxeschool.api.controllers;
 
-import com.oxeschool.api.dtos.curso.CriarAulaRequest;
-import com.oxeschool.api.dtos.curso.CriarCursoRequest;
-import com.oxeschool.api.dtos.curso.CriarModuloRequest;
-import com.oxeschool.api.dtos.curso.CursoResponse;
+import com.oxeschool.api.dtos.curso.*;
 import com.oxeschool.api.services.CursosService;
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +22,13 @@ public class CursosController {
         this.cursosService = cursosService;
     }
 
+    @GetMapping
+    @PreAuthorize("hasRole('Aluno')")
+    public ResponseEntity<Page<CursoResponse>> pegarCursosDisponiveis(Pageable pageable){
+
+        return ResponseEntity.status(HttpStatus.OK).body(cursosService.pegarCursos(pageable));
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<CursoResponse> pegarCursoPorId(@PathVariable UUID id){
 
@@ -30,24 +37,65 @@ public class CursosController {
 
     @PostMapping
     @PreAuthorize("hasRole('Professor')")
-    public ResponseEntity<CursoResponse> criarCurso(@RequestBody CriarCursoRequest criarCursoRequest) {
+    public ResponseEntity<CursoResponse> criarCurso(@Valid @RequestBody CriarCursoRequest criarCursoRequest) {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.criar(criarCursoRequest));
     }
 
+    @PutMapping("/{cursoId}")
+    @PreAuthorize("hasRole('Professor')")
+    public ResponseEntity<CursoResponse> editarCurso(@RequestHeader("Authorization") String token, @PathVariable UUID cursoId, @Valid @RequestBody EditarCursoRequest editarCursoRequest) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(cursosService.editar(token, cursoId, editarCursoRequest));
+    }
+
     @PostMapping("/{cursoId}/modulo")
     @PreAuthorize("hasRole('Professor')")
-    public ResponseEntity<CursoResponse> criarModulo(@PathVariable UUID cursoId, @RequestBody CriarModuloRequest criarModuloRequest){
+    public ResponseEntity<CursoResponse> criarModulo(@PathVariable UUID cursoId, @Valid @RequestBody CriarModuloRequest criarModuloRequest) {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.adicionarModulo(cursoId, criarModuloRequest));
     }
 
+    @PutMapping("/{cursoId}/modulo/{moduloId}")
+    @PreAuthorize("hasRole('Professor')")
+    public ResponseEntity<CursoResponse> editarModulo(@RequestHeader("Authorization") String token, @PathVariable UUID cursoId, @PathVariable UUID moduloId, @Valid @RequestBody EditarModuloRequest editarModuloRequest) {
+
+        return ResponseEntity.status(HttpStatus.OK).body(cursosService.editarModulo(token, cursoId, moduloId, editarModuloRequest));
+    }
+
+    @DeleteMapping("/{cursoId}/modulo/{moduloId}")
+    @PreAuthorize("hasRole('Professor')")
+    public ResponseEntity<CursoResponse> excluirModulo(@RequestHeader("Authorization") String token, @PathVariable UUID cursoId, @PathVariable UUID moduloId) {
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(cursosService.excluirModulo(token, cursoId, moduloId));
+    }
 
     @PostMapping("/{cursoId}/modulo/{moduloId}/aula")
     @PreAuthorize("hasRole('Professor')")
-    public ResponseEntity<CursoResponse> criarAula(@PathVariable UUID cursoId, @PathVariable UUID moduloId, @RequestBody CriarAulaRequest criarAulaRequest){
+    public ResponseEntity<CursoResponse> criarAula(@PathVariable UUID cursoId, @PathVariable UUID moduloId, @Valid @RequestBody CriarAulaRequest criarAulaRequest){
 
         return ResponseEntity.status(HttpStatus.CREATED).body(cursosService.adicionarAula(cursoId, moduloId, criarAulaRequest));
+    }
+
+    @PutMapping("/{cursoId}/modulo/{moduloId}/aula/{aulaId}")
+    @PreAuthorize("hasRole('Professor')")
+    public ResponseEntity<CursoResponse> editarAula(@RequestHeader("Authorization") String token, @PathVariable UUID cursoId, @PathVariable UUID moduloId, @PathVariable UUID aulaId, @Valid @RequestBody EditarAulaRequest editarAulaRequest){
+
+        return ResponseEntity.status(HttpStatus.OK).body(cursosService.editarAula(token, cursoId, moduloId, aulaId, editarAulaRequest));
+    }
+
+    @DeleteMapping("/{cursoId}/modulo/{moduloId}/aula/{aulaId}")
+    @PreAuthorize("hasRole('Professor')")
+    public ResponseEntity<CursoResponse> excluirAula(@RequestHeader("Authorization") String token, @PathVariable UUID cursoId, @PathVariable UUID moduloId, @PathVariable UUID aulaId){
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).body(cursosService.excluirAula(token, cursoId, moduloId, aulaId));
+    }
+
+    @PutMapping("/{cursoId}/status")
+    @PreAuthorize("hasRole('Professor')")
+    public ResponseEntity<CursoResponse> editarStatusCurso(@RequestHeader("Authorization") String token, @PathVariable UUID cursoId, @Valid @RequestBody EditarStatusCursoRequest editarStatusCursoRequest){
+
+        return ResponseEntity.status(HttpStatus.OK).body(cursosService.editarStatus(token, cursoId, editarStatusCursoRequest));
     }
 
 }

@@ -11,12 +11,10 @@ import lombok.Setter;
 @Setter
 public class TokensRequest {
 
-    @NotNull
-    @NotBlank
+    @NotBlank(message = "access token é obrigatorio")
     private String accessToken;
 
-    @NotNull
-    @NotBlank
+    @NotBlank(message = "refresh token é obrigatorio")
     private String refreshToken;
 
 }

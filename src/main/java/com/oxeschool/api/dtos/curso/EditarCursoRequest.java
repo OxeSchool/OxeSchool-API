@@ -6,19 +6,19 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.UUID;
+
 @AllArgsConstructor
 @Getter
 @Setter
-public class CriarCursoRequest {
+public class EditarCursoRequest {
+
 
     @NotBlank(message = "nome é obrigatorio")
     private String nome;
 
     @NotBlank(message = "descrição é obrigatorio")
     private String descricao;
-
-    @NotNull(message = "nome é obrigatorio")
-    private Long idProfessor;
 
     @NotBlank(message = "categoria é obrigatoria")
     private String categoria;

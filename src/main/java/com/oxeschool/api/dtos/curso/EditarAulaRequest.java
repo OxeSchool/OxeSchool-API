@@ -8,7 +8,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CriarAulaRequest {
+public class EditarAulaRequest {
 
     @NotBlank(message = "titulo é obrigatorio")
     private String titulo;
@@ -18,6 +18,5 @@ public class CriarAulaRequest {
 
     @NotBlank(message = "url do video é obrigatoria")
     private String videoUrl;
-
 
 }

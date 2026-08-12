@@ -8,7 +8,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class CriarModuloRequest {
+public class EditarModuloRequest {
 
     @NotBlank(message = "nome é obrigatorio")
     private String nome;

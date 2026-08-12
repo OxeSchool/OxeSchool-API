@@ -123,15 +123,14 @@ public class MatriculaService {
                 })
                 .collect(Collectors.toList());
     }
-
-    // Issue #3 - lista os cursos em que o aluno está/esteve matriculado
+    // Issue #3 - lista os cursos em que o aluno está matriculado
     public List<CursoMatriculadoResponse> listarCursosMatriculados(Long idAluno) {
 
-        var matriculas = matriculasRepository.findByIdAluno(idAluno);
+        var matriculas = matriculasRepository.findByIdAlunoAndStatus(idAluno, StatusCurso.ATIVO);
 
         return matriculas.stream()
                 .map(matricula -> {
-                    var curso = cursosRepository.findById(matricula.getIdCurso())
+                    var curso = cursosRepository.findByIdAndStatus(matricula.getIdCurso(), StatusCurso.ATIVO)
                             .orElseThrow(CursoNaoEncontradoException::new);
 
                     return new CursoMatriculadoResponse(

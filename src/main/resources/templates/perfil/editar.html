@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html th:replace="~{fragments/layout :: page(titulo='Editar perfil', conteudo=~{::section}, ativo='perfil')}"
+      xmlns:th="http://www.thymeleaf.org">
+<body>
+<section>
+    <div class="row justify-content-center">
+        <div class="col-12 col-sm-8 col-md-6 col-lg-5">
+            <div class="ox-card">
+                <div class="ox-card-body">
+                    <h1 class="h4 mb-4 text-center">Editar dados</h1>
+
+                    <div id="editarAlert" class="alert d-none" role="alert"></div>
+
+                    <form id="editarForm" novalidate>
+                        <div class="mb-3">
+                            <label for="nome" class="form-label">Nome</label>
+                            <input type="text" class="form-control" id="nome" name="nome" required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label for="email" class="form-label">Email</label>
+                            <input type="email" class="form-control" id="email" name="email" required>
+                        </div>
+
+                        <div class="d-flex gap-2">
+                            <a th:href="@{/perfil}" class="btn btn-ox-outline rounded-pill w-100">Cancelar</a>
+                            <button type="submit" class="btn btn-ox-primary rounded-pill w-100">Salvar alterações</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        var usuarioAtual = null;
+
+        document.addEventListener('DOMContentLoaded', function () {
+            if (!localStorage.getItem('oxeschool_token')) {
+                window.location.href = '/login';
+                return;
+            }
+
+            usuarioAtual = JSON.parse(localStorage.getItem('oxeschool_usuario') || 'null');
+            if (!usuarioAtual) {
+                window.location.href = '/login';
+                return;
+            }
+
+            document.getElementById('nome').value = usuarioAtual.nome || '';
+            document.getElementById('email').value = usuarioAtual.email || '';
+        });
+
+        function mostrarAlerta(mensagem, tipo) {
+            var alertBox = document.getElementById('editarAlert');
+            alertBox.textContent = mensagem;
+            alertBox.classList.remove('d-none', 'alert-success', 'alert-danger');
+            alertBox.classList.add('alert-' + tipo);
+        }
+
+        async function atualizarCampo(campo, corpo) {
+            var token = localStorage.getItem('oxeschool_token');
+
+            var response = await fetch('/usuario/' + usuarioAtual.id + '/' + campo, {
+                method: 'PATCH',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + token
+                },
+                body: JSON.stringify(corpo)
+            });
+
+            if (!response.ok) {
+                var erro = await response.json().catch(function () { return null; });
+                throw new Error((erro && erro.message) || 'Não foi possível salvar as alterações.');
+            }
+
+            return response.json();
+        }
+
+        document.getElementById('editarForm').addEventListener('submit', async function (event) {
+            event.preventDefault();
+
+            document.getElementById('editarAlert').classList.add('d-none');
+
+            var novoNome = document.getElementById('nome').value.trim();
+            var novoEmail = document.getElementById('email').value.trim();
+
+            try {
+                var usuarioAtualizado = usuarioAtual;
+
+                if (novoNome !== usuarioAtual.nome) {
+                    usuarioAtualizado = await atualizarCampo('nome', { novoNome: novoNome });
+                }
+
+                if (novoEmail !== usuarioAtual.email) {
+                    usuarioAtualizado = await atualizarCampo('email', { novoEmail: novoEmail });
+                }
+
+                usuarioAtual = usuarioAtualizado;
+                localStorage.setItem('oxeschool_usuario', JSON.stringify(usuarioAtualizado));
+
+                mostrarAlerta('Dados atualizados com sucesso!', 'success');
+            } catch (erro) {
+                mostrarAlerta(erro.message, 'danger');
+            }
+        });
+    </script>
+</section>
+</body>
+</html>
