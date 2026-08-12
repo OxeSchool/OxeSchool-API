@@ -2,6 +2,8 @@ package com.oxeschool.api.controllers;
 
 import com.oxeschool.api.dtos.curso.*;
 import com.oxeschool.api.services.CursosService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +19,13 @@ public class CursosController {
 
     public CursosController(CursosService cursosService) {
         this.cursosService = cursosService;
+    }
+
+    @GetMapping
+    @PreAuthorize("hasRole('Aluno')")
+    public ResponseEntity<Page<CursoResponse>> pegarCursosDisponiveis(Pageable pageable){
+
+        return ResponseEntity.status(HttpStatus.OK).body(cursosService.pegarCursos(pageable));
     }
 
     @GetMapping("/{id}")

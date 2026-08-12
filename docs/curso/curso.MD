@@ -4,6 +4,73 @@
 
 --- 
 
+### GET `/`
+
+### Only with Aluno Role
+
+Pagination url (optional)
+
+```/curso?page=0&size=10```
+
+``page`` - num of page (starts from 0)
+
+``size`` - num content for page
+
+Behavior expected:
+
+`Only returns cursos with status ATIVO.`
+
+Response body expected:
+
+   ```
+  {
+    "content": [
+        {
+            "id": UUID
+            "idProfessor": Long
+            "nome": String
+            "descricao": String
+            "categoria": String
+            "cargaHoraria": Long
+            "modulos": [ ... ]
+            "status": String //ATIVO or INATIVO
+        }
+    ],
+    "empty": Boolean,
+    "first": Boolean,
+    "last": Boolean,
+    "number": 0,
+    "numberOfElements": 0,
+    "pageable": {
+        "offset": 0,
+        "pageNumber": 0,
+        "pageSize": 20,
+        "paged": true,
+        "sort": {
+            "empty": false,
+            "sorted": true,
+            "unsorted": false
+        },
+        "unpaged": false
+    },
+    "size": 20,
+    "sort": {
+        "empty": false,
+        "sorted": true,
+        "unsorted": false
+    },
+    "totalElements": Long,
+    "totalPages": Long
+}
+   ```
+
+#### Returns
+
+* `200 - OK` - Sucess.
+* `400 - BAD REQUEST` - Invalid parameters(null parameters, size invalid).
+
+--- 
+
 ### GET `/{id}`
 
 Response body expected:
@@ -422,4 +489,4 @@ Response body expected:
 * `403 - FORBIDDEN` - Curso does not belong to this professor.
 * `404 - NOT FOUND` - Curso not found | Modulo not found | Aula not found.
 
---- 
+---
