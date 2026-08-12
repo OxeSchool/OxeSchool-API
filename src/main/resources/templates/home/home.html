@@ -18,11 +18,22 @@
     </div>
 
     <!-- Últimos cursos acessados -->
-    <h2 class="h4 mb-3">Continue de onde parou</h2>
+    <h2 class="h4 ox-section-title"><i class="bi bi-play-circle"></i> Continue de onde parou</h2>
     <div class="ox-scroll-row mb-5">
         <div class="ox-scroll-item" th:each="curso : ${ultimosCursos}">
             <div class="ox-card h-100">
-                <div class="ox-card-thumb"></div>
+                <div class="ox-card-thumb">
+                    <span class="ox-thumb-icon" th:switch="${curso.categoria}">
+                        <i th:case="'Programação'" class="bi bi-code-slash"></i>
+                        <i th:case="'Backend'" class="bi bi-hdd-network"></i>
+                        <i th:case="'Front-end'" class="bi bi-braces-asterisk"></i>
+                        <i th:case="'Banco de Dados'" class="bi bi-database"></i>
+                        <i th:case="'Design'" class="bi bi-palette"></i>
+                        <i th:case="'Idiomas'" class="bi bi-translate"></i>
+                        <i th:case="'Matemática'" class="bi bi-calculator"></i>
+                        <i th:case="*" class="bi bi-journal-bookmark"></i>
+                    </span>
+                </div>
                 <div class="ox-card-body">
                     <span class="ox-chip mb-2" th:text="${curso.categoria}">Categoria</span>
                     <h3 class="h6 mb-1" th:text="${curso.nome}">Nome do curso</h3>
@@ -43,21 +54,36 @@
     </div>
 
     <!-- Galeria de cursos disponíveis (filtrável) -->
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h2 class="h4 mb-0">Galeria de cursos</h2>
-        <div class="d-flex gap-2">
-            <select class="form-select form-select-sm" style="width:auto">
-                <option>Todas as categorias</option>
-                <option th:each="cat : ${categorias}" th:text="${cat}">Categoria</option>
+    <div class="ox-page-header">
+        <h2 class="h4 mb-0"><i class="bi bi-collection"></i> Galeria de cursos</h2>
+        <div class="ox-toolbar">
+            <select id="filtroCategoria" class="form-select form-select-sm" style="width:auto">
+                <option value="todas">Todas as categorias</option>
+                <option th:each="cat : ${categorias}" th:value="${cat}" th:text="${cat}">Categoria</option>
             </select>
-            <input type="search" class="form-control form-control-sm" placeholder="Buscar curso..." style="width:220px"/>
+            <div class="ox-search">
+                <i class="bi bi-search"></i>
+                <input id="buscaCurso" type="search" class="form-control form-control-sm" placeholder="Buscar curso..." style="width:220px"/>
+            </div>
         </div>
     </div>
 
     <div class="row g-3">
-        <div class="col-6 col-md-4 col-lg-3" th:each="curso : ${cursosDisponiveis}">
+        <div class="col-6 col-md-4 col-lg-3" th:each="curso : ${cursosDisponiveis}"
+             th:attr="data-categoria=${curso.categoria}, data-nome=${curso.nome}">
             <div class="ox-card h-100">
-                <div class="ox-card-thumb"></div>
+                <div class="ox-card-thumb">
+                    <span class="ox-thumb-icon" th:switch="${curso.categoria}">
+                        <i th:case="'Programação'" class="bi bi-code-slash"></i>
+                        <i th:case="'Backend'" class="bi bi-hdd-network"></i>
+                        <i th:case="'Front-end'" class="bi bi-braces-asterisk"></i>
+                        <i th:case="'Banco de Dados'" class="bi bi-database"></i>
+                        <i th:case="'Design'" class="bi bi-palette"></i>
+                        <i th:case="'Idiomas'" class="bi bi-translate"></i>
+                        <i th:case="'Matemática'" class="bi bi-calculator"></i>
+                        <i th:case="*" class="bi bi-journal-bookmark"></i>
+                    </span>
+                </div>
                 <div class="ox-card-body">
                     <span class="ox-chip mb-2" th:text="${curso.categoria}">Categoria</span>
                     <h3 class="h6 mb-1" th:text="${curso.nome}">Nome do curso</h3>

@@ -27,8 +27,11 @@
         <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
         <!-- Tokens do OxeSchool -->
         <link th:href="@{/css/oxeschool.css}" rel="stylesheet"/>
+        <!-- Componentes e ajustes por página -->
+        <link th:href="@{/css/componentes.css}" rel="stylesheet"/>
+        <link th:href="@{/css/telas.css}" rel="stylesheet"/>
     </head>
-    <body>
+    <body th:class="|pagina-${ativo}|">
 
     <nav class="navbar navbar-expand-lg ox-navbar sticky-top">
         <div class="container">
@@ -64,6 +67,15 @@
         <div class="ox-ribbon ox-ribbon-thin"></div>
     </nav>
 
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        var paginaPublica = /*[[${ativo == 'login' or ativo == 'cadastro'}]]*/ false;
+        if (!paginaPublica && !localStorage.getItem('oxeschool_token')) {
+            window.location.href = '/login';
+        }
+        /*]]>*/
+    </script>
+
     <main th:replace="${conteudo}">
         <!-- conteúdo da página entra aqui -->
     </main>
@@ -75,6 +87,7 @@
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/oxeschool.js}"></script>
     </body>
     </html>
 </th:block>

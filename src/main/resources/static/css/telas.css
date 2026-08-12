@@ -1,0 +1,66 @@
+/* ==========================================================================
+   OxeSchool — ajustes por página (simetria entre telas)
+   O <body> de cada página recebe a classe "pagina-<ativo>" via layout.html.
+   ========================================================================== */
+
+/* ==================== Página: login (e cadastro) ==================== */
+body.pagina-login .ox-form-card,
+body.pagina-cadastro .ox-form-card {
+    max-width: 420px;
+}
+
+body.pagina-login .ox-form-card .ox-card-body,
+body.pagina-cadastro .ox-form-card .ox-card-body {
+    padding: 2.25rem 2.5rem;
+}
+
+body.pagina-login .btn-group,
+body.pagina-cadastro .btn-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: .5rem;
+}
+
+body.pagina-login .btn-group .btn,
+body.pagina-cadastro .btn-group .btn {
+    width: 100%;
+    border-radius: 999px !important;
+}
+
+/* ==================== Página: home ==================== */
+body.pagina-home .ox-scroll-item {
+    flex-basis: 240px;
+}
+
+body.pagina-home .ox-card-thumb {
+    height: 110px;
+}
+
+/* ==================== Página: cursos ==================== */
+body.pagina-cursos .ox-card-thumb {
+    height: 110px;
+}
+
+body.pagina-cursos .curso-detalhe-thumb {
+    height: 150px;
+}
+
+/* ==================== Página: matrículas ==================== */
+body.pagina-matriculas .ox-select-form {
+    min-height: 46px;
+}
+
+/* ==================== Página: perfil ==================== */
+body.pagina-perfil .ox-avatar {
+    width: 84px;
+    height: 84px;
+    font-size: 1.9rem;
+}
+
+body.pagina-perfil .ox-scroll-item {
+    flex-basis: 240px;
+}
+
+body.pagina-perfil .ox-card-thumb {
+    height: 100px;
+}
